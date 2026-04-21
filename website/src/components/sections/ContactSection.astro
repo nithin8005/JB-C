@@ -63,6 +63,15 @@ const mailto = `mailto:${email}`;
 			</div>
 		</div>
 	</div>
+	<!-- Visible confirmation (sr-only status above is for assistive tech) -->
+	<div
+		id="contact-copy-toast"
+		class="pointer-events-none fixed bottom-8 left-1/2 z-100 -translate-x-1/2 whitespace-nowrap rounded-md border border-neutral-700/90 bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white opacity-0 shadow-[0_4px_24px_rgba(0,0,0,0.2)] transition-opacity duration-200"
+		role="status"
+		aria-hidden="true"
+	>
+		Copied!
+	</div>
 </section>
 
 <style>
@@ -88,18 +97,37 @@ const mailto = `mailto:${email}`;
 	(() => {
 		const btn = document.getElementById('contact-copy-email');
 		const status = document.getElementById('contact-copy-status');
+		const toast = document.getElementById('contact-copy-toast');
 		if (!btn || !status) return;
 		const address = btn.getAttribute('data-email') || email;
+		const TOAST_MS = 2000;
+		/** @type {ReturnType<typeof setTimeout> | undefined} */
+		let toastTimer;
+
+		function showToast(message) {
+			if (!toast) return;
+			toast.textContent = message;
+			toast.classList.remove('opacity-0');
+			toast.classList.add('opacity-100');
+			clearTimeout(toastTimer);
+			toastTimer = setTimeout(() => {
+				toast.classList.remove('opacity-100');
+				toast.classList.add('opacity-0');
+			}, TOAST_MS);
+		}
+
 		btn.addEventListener('click', async () => {
 			try {
 				await navigator.clipboard.writeText(address);
 				status.textContent = 'Email copied to clipboard.';
+				showToast('Copied!');
 			} catch {
-				status.textContent = 'Copy not supported; address is in the link above.';
+				status.textContent = 'Copy not supported; use the email link above.';
+				showToast("Couldn't copy");
 			}
 			setTimeout(() => {
 				status.textContent = '';
-			}, 3500);
+			}, TOAST_MS);
 		});
 	})();
 </script>
