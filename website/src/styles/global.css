@@ -106,14 +106,6 @@ video {
 .solutions-subnav-shell {
 	transition: grid-template-rows 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
-/*
- * Scroll-away: collapse row height (transform left a visible empty strip).
- * Must override [data-solutions-expanded='true'] so layout space goes away too.
- */
-.solutions-subnav-shell[data-solutions-expanded='true'].solutions-subnav-shell--scroll-away {
-	grid-template-rows: 0fr;
-	pointer-events: none;
-}
 @media (prefers-reduced-motion: reduce) {
 	.solutions-subnav-shell {
 		transition: none;

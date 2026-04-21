@@ -189,6 +189,7 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 
 		const routeActive = header && header.getAttribute('data-solutions-route') === 'true';
 		let solutionsForceOpen = false;
+		let lastLgDesktop = window.matchMedia('(min-width: 1024px)').matches;
 
 		function setMobileOpen(open) {
 			if (!toggle || !panel || !iconMenu || !iconClose) return;
@@ -206,7 +207,6 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 			const show = routeActive || solutionsForceOpen;
 			const expanded = desktop && show;
 			subnavShell.dataset.solutionsExpanded = expanded ? 'true' : 'false';
-			if (!expanded) subnavShell.classList.remove('solutions-subnav-shell--scroll-away');
 			if (desktop && !expanded) subnav.setAttribute('inert', '');
 			else subnav.removeAttribute('inert');
 			btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
@@ -238,9 +238,13 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 		});
 
 		window.addEventListener('resize', function () {
-			if (!window.matchMedia('(min-width: 1024px)').matches) {
-				if (toggle && panel && !panel.classList.contains('hidden')) setMobileOpen(false);
-				solutionsForceOpen = false;
+			const lgDesktop = window.matchMedia('(min-width: 1024px)').matches;
+			if (lgDesktop !== lastLgDesktop) {
+				lastLgDesktop = lgDesktop;
+				if (!lgDesktop) {
+					if (toggle && panel && !panel.classList.contains('hidden')) setMobileOpen(false);
+					solutionsForceOpen = false;
+				}
 			}
 			syncSolutionsSubnav();
 		});
@@ -269,70 +273,6 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 		}
 
 		syncSolutionsSubnav();
-
-		/*
-		 * Collapse Solutions sub-nav on scroll down (grid 1fr→0fr).
-		 * Hysteresis + ignore window: row height animation changes scrollY and was flipping
-		 * scroll-away on/off (jitter). Require a real scroll delta; ignore input briefly after toggling.
-		 */
-		if (subnavShell && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			const TOP_REVEAL = 36;
-			const DIR_DELTA = 12;
-			const LAYOUT_SETTLE_MS = 560;
-			let prevScrollY = window.scrollY;
-			let scrollTicking = false;
-			let ignoreScrollUntil = 0;
-
-			function updateSubnavStripScroll() {
-				scrollTicking = false;
-				const y = window.scrollY;
-				const now = performance.now();
-				const desktop = window.matchMedia('(min-width: 1024px)').matches;
-				const expanded = subnavShell.dataset.solutionsExpanded === 'true';
-				if (!desktop || !expanded) {
-					subnavShell.classList.remove('solutions-subnav-shell--scroll-away');
-					prevScrollY = y;
-					ignoreScrollUntil = 0;
-					return;
-				}
-				if (now < ignoreScrollUntil) {
-					prevScrollY = y;
-					return;
-				}
-
-				const dy = y - prevScrollY;
-				let away = subnavShell.classList.contains('solutions-subnav-shell--scroll-away');
-
-				if (y < TOP_REVEAL) {
-					away = false;
-				} else if (dy > DIR_DELTA) {
-					away = true;
-				} else if (dy < -DIR_DELTA) {
-					away = false;
-				}
-
-				const wasAway = subnavShell.classList.contains('solutions-subnav-shell--scroll-away');
-				if (away !== wasAway) {
-					subnavShell.classList.toggle('solutions-subnav-shell--scroll-away', away);
-					ignoreScrollUntil = now + LAYOUT_SETTLE_MS;
-					prevScrollY = window.scrollY;
-					return;
-				}
-
-				prevScrollY = y;
-			}
-
-			window.addEventListener(
-				'scroll',
-				function () {
-					if (!scrollTicking) {
-						scrollTicking = true;
-						window.requestAnimationFrame(updateSubnavStripScroll);
-					}
-				},
-				{ passive: true },
-			);
-		}
 	})();
 </script>
 
