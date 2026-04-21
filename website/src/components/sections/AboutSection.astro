@@ -1,4 +1,6 @@
---- 
+---
+import { withBase } from '../../lib/withBase';
+
 interface Props {      
 	heading?: string;     
 	stats?: { value: string; label: string }[];
@@ -24,6 +26,7 @@ const stats = statsProp && statsProp.length > 0 ? statsProp : usePoints ? [] : d
 const headingText = heading?.trim();
 
 const figureLabel = aboutImageAlt ?? 'About section image';
+const aboutImageUrl = aboutImage ? withBase(aboutImage) : '';
 ---
 
 <section id="about" class="scroll-mt-20 border-b border-neutral-200/90 bg-white">
@@ -48,11 +51,11 @@ const figureLabel = aboutImageAlt ?? 'About section image';
 				style="--reveal-delay: 0ms"
 			>
 				{
-					aboutImage ? (
+					aboutImageUrl ? (
 						<figure class="m-0 w-max max-w-xs sm:max-w-sm">
 							<div class="aspect-3/2 w-full max-w-xs overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-100 sm:max-w-sm sm:rounded-3xl">
 								<img
-									src={aboutImage}
+									src={aboutImageUrl}
 									alt={aboutImageAlt ?? ''}
 									class="h-full w-full object-cover object-top"
 									loading="lazy"

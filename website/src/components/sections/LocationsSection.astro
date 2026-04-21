@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../../lib/withBase';
+
 interface Location {
 	name: string;
 	image?: string;
@@ -46,7 +48,7 @@ const { title, intro, locations } = Astro.props;
 						>
 							{loc.image ? (
 								<img
-									src={loc.image}
+									src={withBase(loc.image)}
 									alt={loc.imageAlt ?? loc.name}
 									class="h-full w-full object-cover object-center"
 									loading="lazy"

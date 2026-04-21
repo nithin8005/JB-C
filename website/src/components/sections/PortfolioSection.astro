@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../../lib/withBase';
+
 interface Company {
 	name: string;
 	industry: string;
@@ -19,6 +21,7 @@ interface Props {
 const { title, intro, companies, heroBackground, heroHeadline, heroTagline } = Astro.props;
 
 const hasHero = Boolean(heroBackground);
+const heroBackgroundUrl = heroBackground ? withBase(heroBackground) : '';
 const headline = heroHeadline ?? title;
 const tagline = heroTagline ?? intro;
 
@@ -31,7 +34,7 @@ const cardClass =
 		hasHero ? (
 			<div class="relative min-h-[min(22rem,52vh)] overflow-hidden sm:min-h-[min(26rem,56vh)]">
 				<img
-					src={heroBackground}
+					src={heroBackgroundUrl}
 					alt=""
 					class="absolute inset-0 h-full w-full object-cover object-[55%_center] sm:object-center"
 					loading="eager"
@@ -100,10 +103,11 @@ const cardClass =
 		<div class:list={['grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3', hasHero ? 'mt-8' : 'mt-6']}>
 			{
 				companies.map((c, i) => {
-					const logoBlock = c.logo ? (
+					const logoUrl = c.logo ? withBase(c.logo) : '';
+					const logoBlock = logoUrl ? (
 						<div class="mb-3 flex h-11 items-center">
 							<img
-								src={c.logo}
+								src={logoUrl}
 								alt=""
 								class="max-h-10 w-auto max-w-[140px] object-contain object-left"
 								loading="lazy"
@@ -134,7 +138,7 @@ const cardClass =
 
 					return c.href ? (
 						<a
-							href={c.href}
+							href={withBase(c.href)}
 							class:list={[cardClass, 'group text-inherit no-underline outline-none ring-neutral-800 focus-visible:ring-2']}
 							data-reveal-child
 							style={revealDelay}
