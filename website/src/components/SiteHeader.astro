@@ -189,6 +189,8 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 
 		const routeActive = header && header.getAttribute('data-solutions-route') === 'true';
 		let solutionsForceOpen = false;
+		/** On Real Assets / Portfolio / … pages the strip is shown by default; user can dismiss it with the Solutions button. */
+		let solutionsRouteDismissed = false;
 		let lastLgDesktop = window.matchMedia('(min-width: 1024px)').matches;
 
 		function setMobileOpen(open) {
@@ -204,7 +206,7 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 		function syncSolutionsSubnav() {
 			if (!btn || !subnav || !subnavShell) return;
 			const desktop = window.matchMedia('(min-width: 1024px)').matches;
-			const show = routeActive || solutionsForceOpen;
+			const show = routeActive ? !solutionsRouteDismissed : solutionsForceOpen;
 			const expanded = desktop && show;
 			subnavShell.dataset.solutionsExpanded = expanded ? 'true' : 'false';
 			if (desktop && !expanded) subnav.setAttribute('inert', '');
@@ -230,7 +232,11 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 				setMobileOpen(false);
 				toggle.focus();
 			}
-			if (!routeActive && solutionsForceOpen) {
+			if (routeActive && !solutionsRouteDismissed) {
+				solutionsRouteDismissed = true;
+				syncSolutionsSubnav();
+				if (btn) btn.focus();
+			} else if (!routeActive && solutionsForceOpen) {
 				solutionsForceOpen = false;
 				syncSolutionsSubnav();
 				if (btn) btn.focus();
@@ -244,6 +250,7 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 				if (!lgDesktop) {
 					if (toggle && panel && !panel.classList.contains('hidden')) setMobileOpen(false);
 					solutionsForceOpen = false;
+					solutionsRouteDismissed = false;
 				}
 			}
 			syncSolutionsSubnav();
@@ -252,7 +259,11 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 		if (btn && subnav && subnavShell && header) {
 			btn.addEventListener('click', function (e) {
 				e.stopPropagation();
-				if (!routeActive) solutionsForceOpen = !solutionsForceOpen;
+				if (routeActive) {
+					solutionsRouteDismissed = !solutionsRouteDismissed;
+				} else {
+					solutionsForceOpen = !solutionsForceOpen;
+				}
 				syncSolutionsSubnav();
 			});
 			subnavShell.addEventListener('click', function (e) {
@@ -264,6 +275,9 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 			document.addEventListener('click', function () {
 				if (!routeActive && solutionsForceOpen) {
 					solutionsForceOpen = false;
+					syncSolutionsSubnav();
+				} else if (routeActive && !solutionsRouteDismissed) {
+					solutionsRouteDismissed = true;
 					syncSolutionsSubnav();
 				}
 			});
