@@ -258,12 +258,9 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 			subnavShell.addEventListener('click', function (e) {
 				e.stopPropagation();
 			});
-			subnav.querySelectorAll('a').forEach(function (a) {
-				a.addEventListener('click', function () {
-					if (!routeActive) solutionsForceOpen = false;
-					syncSolutionsSubnav();
-				});
-			});
+			// Do not close the Solutions strip when a sub-link is clicked: collapsing here
+			// runs before navigation and feels like the menu "stole" the click on slow networks.
+			// Full page loads reset state; solution routes still pin the bar open via data-solutions-route.
 			document.addEventListener('click', function () {
 				if (!routeActive && solutionsForceOpen) {
 					solutionsForceOpen = false;
