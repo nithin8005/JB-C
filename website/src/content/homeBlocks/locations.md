@@ -1,6 +1,6 @@
 ---
 kind: locations
-title: Our locations
+title: Global presence
 intro: We work with founders and partners across key markets worldwide.
 # Each row can include `image` (optional). Use either:
 # - A file under website/public/ → path from root, e.g. /images/locations/bengaluru.png
