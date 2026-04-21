@@ -1,5 +1,7 @@
 ---
 
+import { withBase } from '../lib/withBase';
+
 interface LinkItem {
 
 	label: string;
@@ -116,7 +118,7 @@ const headClass = 'text-sm font-semibold tracking-tight text-neutral-950';
 
 			<div class="flex flex-col items-start text-left sm:col-span-2 lg:col-span-1 lg:max-w-[17rem] xl:max-w-none">
 
-				<a href="/" class="text-neutral-950 no-underline">
+				<a href={withBase('/')} class="text-neutral-950 no-underline">
 
 					<span class="font-display text-base font-semibold tracking-tight">{siteName}</span>
 
@@ -142,7 +144,7 @@ const headClass = 'text-sm font-semibold tracking-tight text-neutral-950';
 
 								<li>
 
-									<a href={href} class:list={[linkClass, href.startsWith('mailto:') && 'break-all']}>
+									<a href={withBase(href)} class:list={[linkClass, href.startsWith('mailto:') && 'break-all']}>
 
 										{label}
 
@@ -174,7 +176,7 @@ const headClass = 'text-sm font-semibold tracking-tight text-neutral-950';
 
 							<li>
 
-								<a href={href} class:list={[linkClass, href.startsWith('mailto:') && 'break-all']}>
+								<a href={withBase(href)} class:list={[linkClass, href.startsWith('mailto:') && 'break-all']}>
 
 									{label}
 
@@ -214,7 +216,7 @@ const headClass = 'text-sm font-semibold tracking-tight text-neutral-950';
 
 					<span class="mx-2 text-neutral-300" aria-hidden="true">·</span>
 
-					<a href="/" class="text-neutral-600 underline-offset-2 hover:text-neutral-900 hover:underline">
+					<a href={withBase('/')} class="text-neutral-600 underline-offset-2 hover:text-neutral-900 hover:underline">
 
 						Company
 
@@ -224,19 +226,19 @@ const headClass = 'text-sm font-semibold tracking-tight text-neutral-950';
 
 				<nav class="flex flex-wrap gap-x-2 gap-y-1 text-neutral-600" aria-label="Legal">
 
-					<a href="/privacy" class="underline-offset-2 hover:text-neutral-900 hover:underline">Privacy</a>
+					<a href={withBase('/privacy')} class="underline-offset-2 hover:text-neutral-900 hover:underline">Privacy</a>
 
 					<span class="text-neutral-300" aria-hidden="true">·</span>
 
-					<a href="/cookies" class="underline-offset-2 hover:text-neutral-900 hover:underline">Cookies</a>
+					<a href={withBase('/cookies')} class="underline-offset-2 hover:text-neutral-900 hover:underline">Cookies</a>
 
 					<span class="text-neutral-300" aria-hidden="true">·</span>
 
-					<a href="/terms" class="underline-offset-2 hover:text-neutral-900 hover:underline">Terms</a>
+					<a href={withBase('/terms')} class="underline-offset-2 hover:text-neutral-900 hover:underline">Terms</a>
 
 					<span class="text-neutral-300" aria-hidden="true">·</span>
 
-					<a href="/disclaimer" class="underline-offset-2 hover:text-neutral-900 hover:underline">Disclaimer</a>
+					<a href={withBase('/disclaimer')} class="underline-offset-2 hover:text-neutral-900 hover:underline">Disclaimer</a>
 
 				</nav>
 

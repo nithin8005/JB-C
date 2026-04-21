@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/withBase';
 
 const metaEntry = await getEntry('site', 'news-page');
 if (!metaEntry || metaEntry.data.doc !== 'news-page') {
@@ -36,7 +37,7 @@ function formatDate(d: Date) {
 								<h2 class="mt-3 font-display text-xl font-medium text-neutral-900 sm:text-2xl">{item.data.title}</h2>
 								<p class="mt-2 max-w-3xl text-sm leading-relaxed text-neutral-600 sm:text-base">{item.data.description}</p>
 								<a
-									href={item.data.readMoreHref ?? '#'}
+									href={withBase(item.data.readMoreHref ?? '#')}
 									class="mt-4 inline-flex text-sm font-medium text-neutral-900 underline-offset-4 group-hover:underline"
 								>
 									{meta.readMoreLabel}
@@ -48,7 +49,7 @@ function formatDate(d: Date) {
 			</ul>
 			<div class="mt-12 text-center">
 				<a
-					href={meta.viewAllHref}
+					href={withBase(meta.viewAllHref)}
 					class="inline-flex items-center justify-center border border-neutral-900 bg-neutral-900 px-8 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800"
 				>
 					{meta.viewAllLabel}

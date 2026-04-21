@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/withBase';
 
 const entry = await getEntry('careers', 'careers');
 if (!entry) {
@@ -60,7 +61,7 @@ const d = entry.data;
 										</p>
 									</div>
 									<a
-										href={job.applyHref ?? '#'}
+										href={withBase(job.applyHref ?? '#')}
 										class="inline-flex shrink-0 items-center justify-center border border-neutral-900 bg-neutral-900 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-neutral-800"
 									>
 										{job.applyLabel ?? 'Apply Now'}
@@ -76,7 +77,7 @@ const d = entry.data;
 				<h2 class="font-display text-xl font-medium text-neutral-900 sm:text-2xl">{d.generalTitle}</h2>
 				<p class="mx-auto mt-3 max-w-xl text-sm text-neutral-600 sm:text-base">{d.generalBody}</p>
 				<a
-					href={d.generalButtonHref}
+					href={withBase(d.generalButtonHref)}
 					class="mt-6 inline-flex items-center justify-center border border-neutral-900 bg-white px-6 py-3 text-sm font-semibold uppercase tracking-wider text-neutral-900 transition hover:bg-neutral-50"
 				>
 					{d.generalButtonLabel}
