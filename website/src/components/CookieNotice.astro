@@ -1,0 +1,44 @@
+---
+const storageKey = 'jbc_cookie_notice_v1';
+---
+
+<div
+	id="cookie-notice"
+	class="fixed inset-x-0 bottom-0 z-40 hidden border-t border-neutral-200 bg-white/95 p-4 shadow-[0_-4px_24px_rgba(0,0,0,0.06)] backdrop-blur-md supports-[backdrop-filter]:bg-white/90 sm:p-5"
+	role="dialog"
+	aria-labelledby="cookie-notice-title"
+	aria-describedby="cookie-notice-desc"
+>
+	<div class="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+		<div class="min-w-0 text-sm leading-relaxed text-neutral-700">
+			<p id="cookie-notice-title" class="font-medium text-neutral-900">Cookies and similar technologies</p>
+			<p id="cookie-notice-desc" class="mt-1">
+				We use essential cookies and local storage to operate this site (for example to remember this choice). Learn more in our
+				<a href="/cookies" class="text-neutral-900 underline underline-offset-2 hover:text-neutral-600">Cookie Policy</a>
+				and
+				<a href="/privacy" class="text-neutral-900 underline underline-offset-2 hover:text-neutral-600">Privacy Policy</a>.
+			</p>
+		</div>
+		<div class="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
+			<button
+				type="button"
+				id="cookie-notice-accept"
+				class="inline-flex min-h-10 items-center justify-center rounded-md bg-neutral-900 px-4 text-sm font-medium text-white transition hover:bg-neutral-800"
+			>
+				Accept
+			</button>
+		</div>
+	</div>
+</div>
+
+<script define:vars={{ storageKey }}>
+	const root = document.getElementById('cookie-notice');
+	const accept = document.getElementById('cookie-notice-accept');
+	if (root && !localStorage.getItem(storageKey)) {
+		root.classList.remove('hidden');
+	}
+	accept?.addEventListener('click', () => {
+		localStorage.setItem(storageKey, '1');
+		root?.classList.add('hidden');
+	});
+</script>

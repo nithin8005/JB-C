@@ -1,0 +1,121 @@
+@import 'tailwindcss';
+
+/*
+ * Lock the document to the viewport width: tiny horizontal overflow (common with
+ * full-bleed sections, shadows, or subpixel rounding) lets the page “wiggle” when
+ * click-dragging. Stable scrollbar gutter avoids width jumping when the vertical
+ * scrollbar appears or disappears.
+ */
+html {
+	max-width: 100%;
+	overflow-x: hidden;
+	scrollbar-gutter: stable;
+	overscroll-behavior: none;
+}
+body {
+	max-width: 100%;
+	overflow-x: hidden;
+}
+
+img,
+video {
+	-webkit-user-drag: none;
+}
+
+@theme {
+	--font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--font-display: 'IBM Plex Serif', ui-serif, Georgia, 'Times New Roman', serif;
+	/* Homepage hero: bold grotesque sans (Inter) — scoped via `font-hero` in HeroSection */
+	--font-hero: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.hero-video-bg {
+		display: none;
+	}
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+	[data-reveal]:not(:has([data-reveal-child])) {
+		transition:
+			opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1),
+			transform 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+	}
+	[data-reveal]:not(:has([data-reveal-child])):not(.is-visible) {
+		opacity: 0;
+		transform: translate3d(0, 1.125rem, 0);
+	}
+	[data-reveal]:not(:has([data-reveal-child])).is-visible {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+
+	[data-reveal]:has([data-reveal-child]) [data-reveal-child] {
+		transition:
+			opacity 0.88s cubic-bezier(0.19, 1, 0.22, 1),
+			transform 0.88s cubic-bezier(0.19, 1, 0.22, 1);
+		transition-delay: var(--reveal-delay, 0ms);
+	}
+	[data-reveal]:has([data-reveal-child]):not(.is-visible) [data-reveal-child] {
+		opacity: 0;
+		transform: translate3d(0, 1.125rem, 0);
+	}
+	[data-reveal]:has([data-reveal-child]).is-visible [data-reveal-child] {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-reveal],
+	[data-reveal-child] {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+	}
+}
+
+/* Hero: subtle motion on load (no opacity hide) */
+@media (prefers-reduced-motion: no-preference) {
+	@keyframes hero-editorial-shift {
+		from {
+			transform: translate3d(0, 0.75rem, 0);
+		}
+		to {
+			transform: translate3d(0, 0, 0);
+		}
+	}
+	.hero-editorial-in {
+		animation: hero-editorial-shift 0.95s cubic-bezier(0.19, 1, 0.22, 1) both;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.hero-editorial-in {
+		animation: none;
+	}
+}
+
+/* Site header: Solutions sub-bar height animation (ICONIQ-style row, not instant show/hide) */
+.solutions-subnav-shell[data-solutions-expanded='false'] {
+	grid-template-rows: 0fr;
+}
+.solutions-subnav-shell[data-solutions-expanded='true'] {
+	grid-template-rows: 1fr;
+}
+.solutions-subnav-shell {
+	transition: grid-template-rows 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+/*
+ * Scroll-away: collapse row height (transform left a visible empty strip).
+ * Must override [data-solutions-expanded='true'] so layout space goes away too.
+ */
+.solutions-subnav-shell[data-solutions-expanded='true'].solutions-subnav-shell--scroll-away {
+	grid-template-rows: 0fr;
+	pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+	.solutions-subnav-shell {
+		transition: none;
+	}
+}
