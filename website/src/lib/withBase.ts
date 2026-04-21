@@ -27,14 +27,18 @@ export function withBase(path: string): string {
 
 /** Strip deploy base from `Astro.url.pathname` for route comparisons (e.g. `/JB-C/portfolio` → `/portfolio`). */
 export function sitePathname(pathname: string): string {
-	const p = pathname || '/';
+	let p = pathname || '/';
 	const base = normalizedBase();
-	if (base === '/') return p;
-	if (p.startsWith(base)) {
-		const rest = p.slice(base.length);
-		return rest ? `/${rest.replace(/^\/+/, '')}` : '/';
+	if (base !== '/') {
+		if (p.startsWith(base)) {
+			const rest = p.slice(base.length);
+			p = rest ? `/${rest.replace(/^\/+/, '')}` : '/';
+		} else {
+			const baseNoSlash = base.slice(0, -1);
+			if (p === baseNoSlash) p = '/';
+		}
 	}
-	const baseNoSlash = base.slice(0, -1);
-	if (p === baseNoSlash) return '/';
+	// Astro static output often uses trailing slashes (`/portfolio/`); normalize for Set/href checks.
+	if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
 	return p;
 }
