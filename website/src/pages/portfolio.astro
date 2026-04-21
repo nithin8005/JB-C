@@ -1,0 +1,29 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PortfolioSection from '../components/sections/PortfolioSection.astro';
+import { requireHomeBlock } from '../lib/homeBlocks';
+
+const home = await getEntry('marketing', 'home');
+if (!home) {
+	throw new Error('Missing src/content/marketing/home.md');
+}
+
+const portfolioEntry = await requireHomeBlock('portfolio');
+const portfolio = portfolioEntry.data;
+
+const title = `${portfolio.title} — ${home.data.seo.title}`;
+---
+
+<BaseLayout title={title} description={home.data.seo.description}>
+	<main>
+		<PortfolioSection
+			title={portfolio.title}
+			intro={portfolio.intro}
+			companies={portfolio.companies}
+			heroBackground={portfolio.heroBackground}
+			heroHeadline={portfolio.heroHeadline}
+			heroTagline={portfolio.heroTagline}
+		/>
+	</main>
+</BaseLayout>

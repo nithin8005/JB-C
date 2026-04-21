@@ -1,0 +1,87 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const entry = await getEntry('careers', 'careers');
+if (!entry) {
+	throw new Error('Missing src/content/careers/careers.md');
+}
+const d = entry.data;
+---
+<BaseLayout title={d.seo.title} description={d.seo.description}>
+	<main class="border-b border-neutral-200/90 bg-white">
+		<div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
+			<h1 class="font-display text-2xl font-medium text-neutral-900 sm:text-3xl lg:text-4xl">{d.headline}</h1>
+			<p class="mt-3 max-w-2xl text-sm text-neutral-600 sm:text-base">{d.subhead}</p>
+
+			<div class="mt-10 grid gap-8 lg:grid-cols-2 lg:gap-12">
+				<section>
+					<h2 class="font-display text-2xl font-medium text-neutral-900">{d.whyTitle}</h2>
+					<p class="mt-4 text-sm leading-relaxed text-neutral-600 sm:text-base">{d.whyBody}</p>
+					<ul class="mt-8 space-y-3 text-sm text-neutral-700 sm:text-base">
+						{d.benefits.map((b) => (
+							<li class="flex gap-3 border-b border-neutral-200/90 pb-3 last:border-0">
+								<span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-900" aria-hidden="true" />
+								<span>{b}</span>
+							</li>
+						))}
+					</ul>
+				</section>
+				<section class="rounded border border-neutral-200/90 bg-stone-50/80 p-6 sm:p-8">
+					<div
+						class="aspect-video w-full rounded border border-neutral-200/90 bg-neutral-200"
+						role="img"
+						aria-label={d.testimonialPhotoAlt ?? 'Team photo'}
+					/>
+					<blockquote class="mt-6 border-l-2 border-neutral-900 pl-4">
+						<p class="text-sm italic leading-relaxed text-neutral-700 sm:text-base">{d.testimonialQuote}</p>
+						<footer class="mt-3 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+							— {d.testimonialAttribution}
+						</footer>
+					</blockquote>
+				</section>
+			</div>
+
+			<section class="mt-14 lg:mt-16">
+				<h2 class="font-display text-2xl font-medium text-neutral-900">{d.positionsSectionTitle}</h2>
+				<ul class="mt-6 space-y-3">
+					{
+						d.positions.map((job) => (
+							<li>
+								<article class="flex flex-col gap-4 rounded border border-neutral-200/90 bg-stone-50/80 p-6 sm:flex-row sm:items-center sm:justify-between">
+									<div>
+										<h3 class="font-display text-lg font-medium text-neutral-900">{job.title}</h3>
+										<p class="mt-1 text-xs text-neutral-600">
+											<span class="font-medium text-neutral-800">{job.department}</span>
+											<span class="mx-2 text-neutral-300" aria-hidden="true">|</span>
+											{job.location}
+											<span class="mx-2 text-neutral-300" aria-hidden="true">|</span>
+											{job.employmentType}
+										</p>
+									</div>
+									<a
+										href={job.applyHref ?? '#'}
+										class="inline-flex shrink-0 items-center justify-center border border-neutral-900 bg-neutral-900 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-neutral-800"
+									>
+										{job.applyLabel ?? 'Apply Now'}
+									</a>
+								</article>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<section class="mt-14 rounded border border-neutral-200/90 bg-stone-50/80 p-6 text-center sm:mt-16 sm:p-8">
+				<h2 class="font-display text-xl font-medium text-neutral-900 sm:text-2xl">{d.generalTitle}</h2>
+				<p class="mx-auto mt-3 max-w-xl text-sm text-neutral-600 sm:text-base">{d.generalBody}</p>
+				<a
+					href={d.generalButtonHref}
+					class="mt-6 inline-flex items-center justify-center border border-neutral-900 bg-white px-6 py-3 text-sm font-semibold uppercase tracking-wider text-neutral-900 transition hover:bg-neutral-50"
+				>
+					{d.generalButtonLabel}
+				</a>
+			</section>
+		</div>
+	</main>
+</BaseLayout>

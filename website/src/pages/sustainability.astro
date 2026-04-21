@@ -1,0 +1,33 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SustainabilitySection from '../components/sections/SustainabilitySection.astro';
+import { requireHomeBlock } from '../lib/homeBlocks';
+
+const home = await getEntry('marketing', 'home');
+if (!home) {
+	throw new Error('Missing src/content/marketing/home.md');
+}
+
+const sustainabilityEntry = await requireHomeBlock('sustainability');
+const sustainability = sustainabilityEntry.data;
+
+const title = `${sustainability.title} — ${home.data.seo.title}`;
+---
+
+<BaseLayout title={title} description={home.data.seo.description}>
+	<main>
+		<SustainabilitySection
+			title={sustainability.title}
+			intro={sustainability.intro}
+			heroImage={sustainability.heroImage}
+			heroImageAlt={sustainability.heroImageAlt}
+			initiatives={sustainability.initiatives}
+			commitmentTitle={sustainability.commitmentTitle}
+			commitmentParagraphs={sustainability.commitmentParagraphs}
+			commitmentImage={sustainability.commitmentImage}
+			commitmentImageAlt={sustainability.commitmentImageAlt}
+			metrics={sustainability.metrics}
+		/>
+	</main>
+</BaseLayout>

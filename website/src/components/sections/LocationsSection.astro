@@ -1,0 +1,66 @@
+---
+interface Location {
+	name: string;
+	image?: string;
+	imageAlt?: string;
+}
+
+interface Props {
+	title: string;
+	intro?: string;
+	locations: Location[];
+}
+
+const { title, intro, locations } = Astro.props;
+---
+
+<section id="locations" class="scroll-mt-20 border-b border-neutral-200/90 bg-stone-50">
+	<div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
+		<div data-reveal>
+			<h2
+				class="font-display text-2xl font-medium tracking-tight text-neutral-900 sm:text-3xl"
+				data-reveal-child
+				style="--reveal-delay: 0ms"
+			>
+				{title}
+			</h2>
+			{
+				intro && (
+					<p class="mt-3 max-w-2xl text-sm text-neutral-600 sm:text-base" data-reveal-child style="--reveal-delay: 70ms">
+						{intro}
+					</p>
+				)
+			}
+			<div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:mt-10 lg:grid-cols-4 lg:gap-8">
+			{
+				locations.map((loc, i) => (
+					<div
+						class="flex flex-col"
+						data-reveal-child
+						style={`--reveal-delay: ${110 + i * 75}ms`}
+					>
+						<div
+							class="relative aspect-3/2 w-full overflow-hidden rounded border border-neutral-200/90 bg-neutral-100"
+							role="img"
+							aria-label={loc.imageAlt ?? `${loc.name} location`}
+						>
+							{loc.image ? (
+								<img
+									src={loc.image}
+									alt={loc.imageAlt ?? loc.name}
+									class="h-full w-full object-cover object-center"
+									loading="lazy"
+									decoding="async"
+								/>
+							) : (
+								<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.9)_0%,transparent_55%),radial-gradient(ellipse_at_70%_80%,rgba(0,0,0,0.04)_0%,transparent_50%)]" />
+							)}
+						</div>
+						<p class="mt-3 font-display text-lg font-medium tracking-wide text-neutral-900 sm:text-xl">{loc.name}</p>
+					</div>
+				))
+			}
+			</div>
+		</div>
+	</div>
+</section>

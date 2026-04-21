@@ -1,0 +1,147 @@
+--- 
+interface Props {      
+	heading?: string;     
+	stats?: { value: string; label: string }[];
+	/** Replaces stat boxes when non-empty (homepage About, right column). */
+	points?: string[];
+	/** Path from site root (file under `website/public/`). */
+	aboutImage?: string;
+	aboutImageAlt?: string;
+	/** Bold name, gray title, bullets (large photo stays in the left column only). */
+	profile?: { name: string; title: string; roles: string[] };
+}
+
+const defaultStats = [
+	{ value: '4+', label: 'Portfolio' },
+	{ value: '2026', label: 'Founded' },
+	{ value: '$2.5M', label: 'AUM' },
+];
+
+const { heading, stats: statsProp, points: pointsProp, aboutImage, aboutImageAlt, profile } = Astro.props;
+const points = (pointsProp ?? []).map((p) => p.trim()).filter(Boolean);
+const usePoints = points.length > 0;
+const stats = statsProp && statsProp.length > 0 ? statsProp : usePoints ? [] : defaultStats;
+const headingText = heading?.trim();
+
+const figureLabel = aboutImageAlt ?? 'About section image';
+---
+
+<section id="about" class="scroll-mt-20 border-b border-neutral-200/90 bg-white">
+	<div class="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
+		{
+			headingText ? (
+				<h2 class="font-display text-2xl font-medium leading-tight tracking-tight text-neutral-900 sm:text-3xl">
+					{headingText}
+				</h2>
+			) : null
+		}
+		<div
+			data-reveal
+			class:list={[
+				'grid gap-6 sm:gap-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center lg:gap-x-6 xl:gap-x-8 lg:gap-y-0',
+				headingText ? 'mt-6 lg:mt-8' : null,
+			]}
+		>
+			<div
+				class="order-1 flex min-w-0 shrink-0 justify-center lg:order-1 lg:justify-start"
+				data-reveal-child
+				style="--reveal-delay: 0ms"
+			>
+				{
+					aboutImage ? (
+						<figure class="m-0 w-max max-w-xs sm:max-w-sm">
+							<div class="aspect-3/2 w-full max-w-xs overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-100 sm:max-w-sm sm:rounded-3xl">
+								<img
+									src={aboutImage}
+									alt={aboutImageAlt ?? ''}
+									class="h-full w-full object-cover object-top"
+									loading="lazy"
+									decoding="async"
+								/>
+							</div>
+							{aboutImageAlt ? <figcaption class="sr-only">{figureLabel}</figcaption> : null}
+						</figure>
+					) : (
+						<div
+							class="aspect-3/2 w-full max-w-xs overflow-hidden rounded-2xl border border-neutral-200/90 bg-neutral-100 sm:max-w-sm sm:rounded-3xl"
+							aria-hidden="true"
+						/>
+					)
+				}
+			</div>
+			<div
+				class="order-2 flex min-w-0 w-full max-w-xl flex-col lg:order-2 lg:mt-0 lg:max-w-none"
+				data-reveal-child
+				style="--reveal-delay: 95ms"
+			>
+				<div class="about-prose text-sm leading-normal text-neutral-600 sm:text-base">
+					<slot />
+				</div>
+				{
+					profile && profile.roles.length > 0 ? (
+						<div class="about-profile mt-4 sm:mt-5 lg:mt-3">
+							<p class="font-sans text-base font-semibold tracking-tight text-neutral-900">{profile.name}</p>
+							<p class="mt-0.5 text-sm leading-tight text-neutral-500">{profile.title}</p>
+							<ul class="about-profile-roles mt-1.5 list-disc space-y-1 pl-5 text-sm leading-tight text-neutral-600 marker:text-neutral-400">
+								{profile.roles.map((role) => (
+									<li>{role}</li>
+								))}
+							</ul>
+						</div>
+					) : null
+				}
+				{
+					usePoints ? (
+						<ul class="about-highlights mt-4 list-disc space-y-1 pl-5 text-sm leading-tight text-neutral-600 marker:text-neutral-400 sm:mt-5 lg:mt-3">
+							{points.map((line) => (
+								<li>{line}</li>
+							))}
+						</ul>
+					) : stats.length > 0 ? (
+						<ul class="mt-4 flex max-w-full flex-wrap items-stretch gap-2 sm:mt-5 sm:gap-2.5 lg:mt-3">
+							{stats.map(({ value, label }) => (
+								<li class="flex w-max min-w-0 max-w-full shrink-0 flex-col justify-center rounded border border-neutral-200/90 bg-white px-2.5 py-2 text-center sm:px-3 sm:py-2.5">
+									<p class="text-lg font-semibold tabular-nums text-neutral-900 sm:text-xl">{value}</p>
+									<p class="mt-0.5 text-[10px] font-medium uppercase leading-tight tracking-wide text-neutral-500 sm:text-xs">
+										{label}
+									</p>
+								</li>
+							))}
+						</ul>
+					) : null
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	.about-prose > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.75rem;
+	}
+	.about-prose :where(p) {
+		margin: 0;
+		line-height: 1.5;
+	}
+	.about-prose :where(strong) {
+		font-weight: 600;
+		color: #171717;
+	}
+	.about-prose :where(a) {
+		color: #171717;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+	.about-prose :where(ul) {
+		margin: 0;
+		padding-left: 1.25rem;
+		list-style-type: disc;
+	}
+	.about-prose :where(li) {
+		margin: 0.2rem 0;
+		line-height: 1.45;
+	}
+	.about-prose :where(p + ul) {
+		margin-top: 0.5rem;
+	}
+</style>

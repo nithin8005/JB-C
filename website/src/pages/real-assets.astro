@@ -1,0 +1,25 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RealAssetsPage from '../components/sections/RealAssetsPage.astro';
+
+const entry = await getEntry('site', 'real-assets');
+if (!entry || entry.data.doc !== 'real-assets') {
+	throw new Error('Missing src/content/site/real-assets.md with doc: real-assets');
+}
+const d = entry.data;
+---
+
+<BaseLayout title={d.seo.title} description={d.seo.description}>
+	<main>
+		<RealAssetsPage
+			heroHeadline={d.heroHeadline}
+			heroSubline={d.heroSubline}
+			heroImage={d.heroImage}
+			heroImageAlt={d.heroImageAlt}
+			pillars={d.pillars}
+			closingHeadline={d.closingHeadline}
+			closingBody={d.closingBody}
+		/>
+	</main>
+</BaseLayout>

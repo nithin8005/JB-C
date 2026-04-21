@@ -1,0 +1,23 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
+import { requireHomeBlock } from '../lib/homeBlocks';
+
+const home = await getEntry('marketing', 'home');
+if (!home) {
+	throw new Error('Missing src/content/marketing/home.md');
+}
+
+const contactEntry = await requireHomeBlock('contact');
+const contact = contactEntry.data;
+
+const title = `${contact.title} — ${home.data.seo.title}`;
+const description = contact.intro;
+---
+
+<BaseLayout title={title} description={description}>
+	<main>
+		<ContactSection title={contact.title} intro={contact.intro} email={contact.email} />
+	</main>
+</BaseLayout>

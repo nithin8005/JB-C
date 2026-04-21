@@ -1,0 +1,124 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	ctaLabel: string;
+	ctaHref: string;
+	videoWebm?: string;
+	videoMp4?: string;
+	videoPoster?: string;
+	/** Shown full-bleed when set and no background video. */
+	backgroundImage?: string;
+	backgroundImageAlt?: string;
+}
+
+const { title, description, ctaLabel, ctaHref, videoWebm, videoMp4, videoPoster, backgroundImage, backgroundImageAlt } =
+	Astro.props;
+
+const hasVideo = Boolean(videoWebm || videoMp4);
+const bgImage = (backgroundImage ?? '').trim();
+const hasBgImage = Boolean(bgImage && !hasVideo);
+
+---
+
+<section
+	id="hero"
+	class:list={[
+		'relative overflow-hidden border-b border-neutral-200/90',
+		hasVideo
+			? 'min-h-[min(32rem,85vh)] sm:min-h-[min(36rem,88vh)]'
+			: hasBgImage
+				? 'min-h-[min(26rem,78vh)] sm:min-h-[min(30rem,82vh)]'
+				: 'bg-stone-50',
+	]}
+>
+	{
+		hasVideo ? (
+			<>
+				<div
+					class="hero-video-fallback absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950"
+					aria-hidden="true"
+				/>
+				<video
+					class="hero-video-bg absolute inset-0 h-full w-full object-cover"
+					autoplay
+					muted
+					loop
+					playsinline
+					disablepictureinpicture
+					preload="metadata"
+					poster={videoPoster}
+					aria-hidden="true"
+				>
+					{videoWebm ? <source src={videoWebm} type="video/webm" /> : null}
+					{videoMp4 ? <source src={videoMp4} type="video/mp4" /> : null}
+				</video>
+				<div
+					class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/25 sm:from-black/75 sm:via-black/40 sm:to-transparent"
+					aria-hidden="true"
+				/>
+			</>
+		) : hasBgImage ? (
+			<>
+				<div class="absolute inset-0 bg-stone-100" aria-hidden="true" />
+				<img
+					src={bgImage}
+					alt={backgroundImageAlt ?? ''}
+					class="absolute inset-0 z-[1] h-full w-full object-cover object-[20%_50%] sm:object-center"
+					loading="eager"
+					decoding="async"
+					fetchpriority="high"
+				/>
+			</>
+		) : null
+	}
+
+	<div
+		class:list={[
+			'relative z-10 mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-20',
+			(hasVideo || hasBgImage) && 'lg:py-24',
+		]}
+	>
+		<div class="hero-editorial-in max-w-3xl font-hero">
+			<h1
+				class:list={[
+					'text-[clamp(2.1rem,4.2vw,3.35rem)] font-semibold leading-[1.06] tracking-[-0.02em]',
+					hasVideo ? 'text-white' : 'text-neutral-900',
+				]}
+			>
+				{title}
+			</h1>
+			<p
+				class:list={[
+					'mt-5 max-w-xl text-base font-normal leading-relaxed sm:text-lg',
+					hasVideo ? 'text-white/85' : 'text-neutral-600',
+				]}
+			>
+				{description}
+			</p>
+			<a
+				href={ctaHref}
+				class:list={[
+					'group mt-8 inline-flex items-center gap-1 border-b pb-0.5 text-sm font-semibold tracking-wide transition',
+					hasVideo
+						? 'border-white text-white hover:border-white/60 hover:text-white/85'
+						: 'border-neutral-900 text-neutral-900 hover:border-neutral-500 hover:text-neutral-600',
+				]}
+			>
+				{ctaLabel}
+				<span class="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+					→
+				</span>
+			</a>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	@media (prefers-reduced-motion: reduce) {
+		.hero-video-bg {
+			display: none;
+		}
+	}
+</style>
+
