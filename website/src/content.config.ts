@@ -13,15 +13,7 @@ const marketing = defineCollection({
 		/** Hero-style image for the About section (`public/` path from site root, e.g. `/images/about.jpg`). */
 		aboutImage: z.string().optional(),
 		aboutImageAlt: z.string().optional(),
-		stats: z
-			.array(
-				z.object({
-					value: z.string(),
-					label: z.string(),
-				}),
-			)
-			.optional(),
-		/** When set, replaces the three stat boxes under the About column with this bullet list. */
+		/** Optional bullet list under the About column on the homepage. */
 		aboutPoints: z.array(z.string()).optional(),
 		/** Homepage About: name + primary title + role bullets (photo is the main column image only). */
 		aboutProfile: z
