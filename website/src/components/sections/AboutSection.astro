@@ -1,10 +1,9 @@
 ---
 import { withBase } from '../../lib/withBase';
 
-interface Props {      
-	heading?: string;     
-	stats?: { value: string; label: string }[];
-	/** Replaces stat boxes when non-empty (homepage About, right column). */
+interface Props {
+	heading?: string;
+	/** Optional bullet list under the About column (homepage). */
 	points?: string[];
 	/** Path from site root (file under `website/public/`). */
 	aboutImage?: string;
@@ -13,16 +12,9 @@ interface Props {
 	profile?: { name: string; title: string; roles: string[] };
 }
 
-const defaultStats = [
-	{ value: '4+', label: 'Portfolio' },
-	{ value: '2026', label: 'Founded' },
-	{ value: '$2.5M', label: 'AUM' },
-];
-
-const { heading, stats: statsProp, points: pointsProp, aboutImage, aboutImageAlt, profile } = Astro.props;
+const { heading, points: pointsProp, aboutImage, aboutImageAlt, profile } = Astro.props;
 const points = (pointsProp ?? []).map((p) => p.trim()).filter(Boolean);
 const usePoints = points.length > 0;
-const stats = statsProp && statsProp.length > 0 ? statsProp : usePoints ? [] : defaultStats;
 const headingText = heading?.trim();
 
 const figureLabel = aboutImageAlt ?? 'About section image';
@@ -98,17 +90,6 @@ const aboutImageUrl = aboutImage ? withBase(aboutImage) : '';
 						<ul class="about-highlights mt-4 list-disc space-y-1 pl-5 text-sm leading-tight text-neutral-600 marker:text-neutral-400 sm:mt-5 lg:mt-3">
 							{points.map((line) => (
 								<li>{line}</li>
-							))}
-						</ul>
-					) : stats.length > 0 ? (
-						<ul class="mt-4 flex max-w-full flex-wrap items-stretch gap-2 sm:mt-5 sm:gap-2.5 lg:mt-3">
-							{stats.map(({ value, label }) => (
-								<li class="flex w-max min-w-0 max-w-full shrink-0 flex-col justify-center rounded border border-neutral-200/90 bg-white px-2.5 py-2 text-center sm:px-3 sm:py-2.5">
-									<p class="text-lg font-semibold tabular-nums text-neutral-900 sm:text-xl">{value}</p>
-									<p class="mt-0.5 text-[10px] font-medium uppercase leading-tight tracking-wide text-neutral-500 sm:text-xs">
-										{label}
-									</p>
-								</li>
 							))}
 						</ul>
 					) : null
