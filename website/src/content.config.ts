@@ -50,6 +50,8 @@ const homeBlocks = defineCollection({
 			kind: z.literal('portfolio'),
 			title: z.string(),
 			intro: z.string(),
+			/** Short line under the Portfolio heading (e.g. “Companies we build and invest in”). */
+			subtitle: z.string().optional(),
 			/** Full-width hero image at top of portfolio page (`public/` path). */
 			heroBackground: z.string().optional(),
 			/** Hero headline when `heroBackground` is set (defaults to `title`). */
@@ -114,6 +116,83 @@ const homeBlocks = defineCollection({
 			),
 		}),
 		z.object({
+			kind: z.literal('affiliates'),
+			title: z.string(),
+			intro: z.string().optional(),
+			affiliates: z
+				.array(
+					z.object({
+						name: z.string(),
+						/** Logo path under `public/` (e.g. `/logos/affiliate.svg`) or absolute URL. */
+						logo: z.string().optional(),
+						logoAlt: z.string().optional(),
+						/** Optional one-line description shown under the name. */
+						description: z.string().optional(),
+						/** External or internal URL; entire tile is a link when set. */
+						href: z.string().optional(),
+					}),
+				)
+				.optional(),
+			groups: z
+				.array(
+					z.object({
+						title: z.string(),
+						items: z.array(
+							z.object({
+								name: z.string(),
+								logo: z.string().optional(),
+								logoAlt: z.string().optional(),
+								description: z.string().optional(),
+								href: z.string().optional(),
+							}),
+						),
+					}),
+				)
+				.optional(),
+		}),
+		z
+			.object({
+				kind: z.literal('partners'),
+				title: z.string(),
+				intro: z.string().optional(),
+				/**
+				 * Single banner image of all partner logos (`public/` path or absolute URL).
+				 * When set, per-partner `groups` are ignored for display.
+				 */
+				gridImage: z.string().optional(),
+				gridImageAlt: z.string().optional(),
+				groups: z
+					.array(
+						z.object({
+							title: z.string(),
+							items: z.array(
+								z.object({
+									name: z.string(),
+									logo: z.string(),
+									href: z.string().optional(),
+									/** When true, logo renders smaller in the grid (wide wordmarks). */
+									compactLogo: z.boolean().optional(),
+									/** When true, logo renders slightly larger in the grid. */
+									largeLogo: z.boolean().optional(),
+								}),
+							),
+						}),
+					)
+					.optional(),
+			})
+			.superRefine((data, ctx) => {
+				const hasBanner = Boolean(data.gridImage?.trim());
+				const groupCount =
+					data.groups?.reduce((n, g) => n + (g.items?.length ?? 0), 0) ?? 0;
+				if (!hasBanner && groupCount === 0) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Partners: set `gridImage` or provide `groups` with at least one item.',
+						path: ['gridImage'],
+					});
+				}
+			}),
+		z.object({
 			kind: z.literal('contact'),
 			title: z.string(),
 			intro: z.string(),
@@ -172,7 +251,10 @@ const site = defineCollection({
 	schema: z.discriminatedUnion('doc', [
 		z.object({
 			doc: z.literal('branding'),
+			/** Short name in the site header (e.g. JB&C). */
 			siteNameDisplay: z.string(),
+			/** Full name in the footer brand line; defaults to `siteNameDisplay` when omitted. */
+			footerSiteName: z.string().optional(),
 			footerTagline: z.string(),
 			footerLegalName: z.string(),
 			copyrightEntity: z.string(),

@@ -4,6 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSection from '../components/sections/HeroSection.astro';
 import AboutSection from '../components/sections/AboutSection.astro';
 import LocationsSection from '../components/sections/LocationsSection.astro';
+import PortfolioSection from '../components/sections/PortfolioSection.astro';
+import PartnersSection from '../components/sections/PartnersSection.astro';
+import AffiliatesSection from '../components/sections/AffiliatesSection.astro';
 import { requireHomeBlock } from '../lib/homeBlocks';
 
 const home = await getEntry('marketing', 'home');
@@ -23,6 +26,24 @@ if (locationsEntry.data.kind !== 'locations') {
 	throw new Error('Invalid locations block');
 }
 const locations = locationsEntry.data;
+
+const portfolioEntry = await requireHomeBlock('portfolio');
+if (portfolioEntry.data.kind !== 'portfolio') {
+	throw new Error('Invalid portfolio block');
+}
+const portfolio = portfolioEntry.data;
+
+const partnersEntry = await requireHomeBlock('partners');
+if (partnersEntry.data.kind !== 'partners') {
+	throw new Error('Invalid partners block');
+}
+const partners = partnersEntry.data;
+
+const affiliatesEntry = await requireHomeBlock('affiliates');
+if (affiliatesEntry.data.kind !== 'affiliates') {
+	throw new Error('Invalid affiliates block');
+}
+const affiliates = affiliatesEntry.data;
 ---
 
 <BaseLayout title={home.data.seo.title} description={home.data.seo.description}>
@@ -51,6 +72,25 @@ const locations = locationsEntry.data;
 			title={locations.title}
 			intro={locations.intro}
 			locations={locations.locations}
+		/>
+		<PortfolioSection
+			title={portfolio.title}
+			intro={portfolio.intro}
+			subtitle={portfolio.subtitle}
+			companies={portfolio.companies}
+		/>
+		<PartnersSection
+			title={partners.title}
+			intro={partners.intro}
+			gridImage={partners.gridImage}
+			gridImageAlt={partners.gridImageAlt}
+			groups={partners.groups ?? []}
+		/>
+		<AffiliatesSection
+			title={affiliates.title}
+			intro={affiliates.intro}
+			affiliates={affiliates.affiliates ?? []}
+			groups={affiliates.groups ?? []}
 		/>
 	</main>
 </BaseLayout>

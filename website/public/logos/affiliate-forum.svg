@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="44" viewBox="0 0 140 44" fill="none" role="img" aria-labelledby="af">
+	<title id="af">Affiliate forum logo</title>
+	<rect width="140" height="44" rx="8" fill="#fafaf9"/>
+	<rect x="12" y="12" width="28" height="20" rx="3" fill="#e7e5e4" stroke="#a8a29e" stroke-width="1"/>
+	<circle cx="22" cy="20" r="3" fill="#78716c"/>
+	<circle cx="30" cy="20" r="3" fill="#78716c"/>
+	<text x="48" y="27" font-family="ui-sans-serif,system-ui,sans-serif" font-size="11" font-weight="600" fill="#44403c">Forum</text>
+</svg>
