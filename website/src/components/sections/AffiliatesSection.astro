@@ -1,0 +1,195 @@
+---
+import { withBase } from '../../lib/withBase';
+
+interface Affiliate {
+	name: string;
+	logo?: string;
+	logoAlt?: string;
+	description?: string;
+	href?: string;
+}
+
+interface AffiliateGroup {
+	title: string;
+	items: Affiliate[];
+}
+
+interface Props {
+	title: string;
+	intro?: string;
+	affiliates?: Affiliate[];
+	groups?: AffiliateGroup[];
+}
+
+const { title, intro, affiliates = [], groups } = Astro.props;
+
+const affiliateBlocks: AffiliateGroup[] =
+	groups && groups.length > 0 ? groups : [{ title: '', items: affiliates }];
+
+const hasSubsectionTitles = affiliateBlocks.some((b) => b.title.trim().length > 0);
+const normalizeTitle = (value: string) => value.trim().toLowerCase();
+
+let revealIndex = 0;
+const affiliateBlocksMeta = affiliateBlocks.map((block) => ({
+	title: block.title,
+	items: block.items.map((item) => ({
+		item,
+		revealDelay: `--reveal-delay: ${85 + revealIndex++ * 45}ms`,
+	})),
+}));
+
+/** Two initials from a display name (handles tokens like `J.Basani` and `&`). */
+function initialsFor(name: string): string {
+	const raw = name.trim();
+	if (!raw) return '—';
+	const letters: string[] = [];
+	outer: for (const segment of raw.split(/[\s/&|,]+/).filter(Boolean)) {
+		for (const chunk of segment.split(/[^A-Za-z0-9]+/).filter(Boolean)) {
+			const m = chunk.match(/[A-Za-z0-9]/);
+			if (m) {
+				letters.push(m[0]);
+				if (letters.length >= 2) break outer;
+			}
+		}
+	}
+	if (letters.length >= 2) return `${letters[0]}${letters[1]}`.toUpperCase();
+	if (letters.length === 1) return `${letters[0]}${letters[0]}`.toUpperCase();
+	return raw.replace(/\s+/g, '').slice(0, 2).toUpperCase() || '—';
+}
+
+/** Lighter surface, smaller type, softer border than portfolio tiles. */
+const cardClass =
+	'group flex h-full min-w-0 flex-col items-center overflow-hidden rounded-lg border border-neutral-200/70 bg-white/80 px-3 py-4 text-center shadow-sm transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-px hover:border-neutral-300/80 hover:shadow sm:px-5 sm:py-5';
+const parentCardClass =
+	'group flex h-full min-w-0 flex-col items-center overflow-hidden rounded-lg  px-5 py-6 text-center sm:px-7 sm:py-7';
+---
+
+<section id="affiliates" class="scroll-mt-20 border-b border-neutral-200/90 bg-neutral-50/60">
+	<div class="mx-auto max-w-6xl px-5 py-9 sm:px-8 lg:px-12 lg:py-11">
+		<div data-reveal>
+			<h2
+				class="font-display text-xl font-medium tracking-tight text-neutral-800 sm:text-2xl"
+				data-reveal-child
+				style="--reveal-delay: 0ms"
+			>
+				{title}
+			</h2>
+			{
+				intro && (
+					<p class="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-500 sm:text-[0.9375rem]" data-reveal-child style="--reveal-delay: 60ms">
+						{intro}
+					</p>
+				)
+			}
+			<div class="mt-7 sm:mt-8">
+				{
+					affiliateBlocksMeta.map((block, groupIdx) => (
+						<div class:list={[groupIdx > 0 ? 'mt-10 sm:mt-12' : '']}>
+							{block.title.trim().length > 0 ? (
+								<h3
+									class="font-display text-sm font-medium tracking-tight text-neutral-800 sm:text-[0.9375rem]"
+									data-reveal-child
+									style="--reveal-delay: 0ms"
+								>
+									{block.title}
+								</h3>
+							) : null}
+							{(() => {
+								const blockKey = normalizeTitle(block.title);
+								const isParentGroup = blockKey === 'parent group';
+								const isMemberInstitutions = blockKey === 'member institutions';
+								const isDirectVentures = blockKey === 'direct ventures';
+								const gridClass = isParentGroup
+									? 'mt-4 grid min-w-0 grid-cols-1'
+									: 'mt-4 grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-4';
+
+								return (
+									<div class={gridClass}>
+							{block.items.map(({ item, revealDelay }, itemIdx) => {
+								const logoSrc = item.logo?.trim() ? withBase(item.logo.trim()) : '';
+								const isAkarLogo = /akarcollage\.png$/i.test(logoSrc);
+								const logoImgClass = isParentGroup
+									? 'max-h-14 w-full max-w-full object-contain object-center opacity-90 transition duration-300 group-hover:opacity-100 sm:max-h-16 sm:w-auto sm:max-w-52 sm:group-hover:scale-[1.04] lg:max-h-25 lg:max-w-64'
+									: isAkarLogo
+										? 'max-h-9 w-full max-w-full object-contain object-center opacity-90 transition duration-300 group-hover:opacity-100 sm:max-h-10 sm:w-auto sm:max-w-36 sm:group-hover:scale-[1.04] lg:max-h-11 lg:max-w-40'
+										: 'max-h-12 w-full max-w-full object-contain object-center opacity-90 transition duration-300 group-hover:opacity-100 sm:max-h-14 sm:w-auto sm:max-w-46 sm:group-hover:scale-[1.04] lg:max-h-16 lg:max-w-50';
+								const logoBlock = logoSrc ? (
+									<div class:list={['mb-3 flex h-14 w-full min-w-0 items-center justify-center overflow-hidden sm:h-16', isParentGroup && 'pt-2 sm:pt-3']}>
+										<img
+											src={logoSrc}
+											alt={item.logoAlt ?? ''}
+											class={logoImgClass}
+											loading="lazy"
+											decoding="async"
+										/>
+									</div>
+								) : (
+									<div
+										class="mb-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-md border border-neutral-200/80 bg-neutral-100/90 font-display text-xs font-medium tracking-tight text-neutral-400 transition-colors duration-300 group-hover:border-neutral-300 group-hover:text-neutral-500 sm:h-16 sm:w-16 sm:text-sm"
+										aria-hidden="true"
+									>
+										{initialsFor(item.name)}
+									</div>
+								);
+
+								const useMemberCardTypography = isMemberInstitutions || isDirectVentures;
+								const nameClass = useMemberCardTypography
+									? 'min-w-0 break-words font-display text-xs font-medium leading-snug text-neutral-800 sm:text-[0.8125rem]'
+									: 'min-w-0 break-words font-display text-base font-medium text-neutral-800 sm:text-[1.05rem]';
+
+								const body = (
+									<>
+										{logoBlock}
+										{hasSubsectionTitles ? (
+											<p class:list={[nameClass, 'w-full']}>{item.name}</p>
+										) : (
+											<h3 class:list={[nameClass, 'w-full']}>{item.name}</h3>
+										)}
+										{item.description && (
+											<p class="mt-1.5 text-xs leading-snug text-neutral-500 sm:text-[13px]">{item.description}</p>
+										)}
+										{item.href && (
+											<p class="mt-2.5 text-[11px] font-medium text-neutral-700 underline-offset-2 transition group-hover:underline sm:text-xs">
+												
+											</p>
+										)}
+									</>
+								);
+
+								const external = Boolean(item.href?.startsWith('http'));
+								const cardVariantClass = isParentGroup ? 'mx-auto w-full max-w-3xl' : '';
+								const directVentureCenterClass = '';
+								const cardClasses = [
+									isParentGroup ? parentCardClass : cardClass,
+									cardVariantClass,
+									directVentureCenterClass,
+									'text-inherit no-underline outline-none ring-neutral-800 focus-visible:ring-2',
+								];
+
+								return item.href ? (
+									<a
+										href={withBase(item.href)}
+										class:list={cardClasses}
+										data-reveal-child
+										style={revealDelay}
+										target={external ? '_blank' : undefined}
+										rel={external ? 'noopener noreferrer' : undefined}
+									>
+										{body}
+									</a>
+								) : (
+									<article class:list={cardClasses} data-reveal-child style={revealDelay}>
+										{body}
+									</article>
+								);
+							})}
+									</div>
+								);
+							})()}
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</section>

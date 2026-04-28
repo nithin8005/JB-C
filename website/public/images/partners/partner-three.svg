@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="t3">
+	<title id="t3">Abstract partner visual — neutral layers</title>
+	<defs>
+		<linearGradient id="g3" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" stop-color="#f4f4f5"/>
+			<stop offset="100%" stop-color="#e4e4e7"/>
+		</linearGradient>
+	</defs>
+	<rect width="1200" height="800" fill="url(#g3)"/>
+	<rect x="1" y="1" width="1198" height="798" fill="none" stroke="#d4d4d8" stroke-width="2"/>
+	<circle cx="300" cy="240" r="120" fill="#a1a1aa" opacity="0.12"/>
+	<circle cx="920" cy="200" r="90" fill="#71717a" opacity="0.1"/>
+	<path fill="#d4d4d8" opacity="0.45" d="M0 500 L240 360 L420 440 L600 300 L780 400 L960 280 L1200 360 L1200 800 L0 800 Z"/>
+	<path fill="#a1a1aa" opacity="0.28" d="M0 560 L280 440 L460 520 L640 380 L860 480 L1080 340 L1200 400 L1200 800 L0 800 Z"/>
+	<rect x="640" y="460" width="110" height="240" rx="4" fill="#71717a" opacity="0.18"/>
+	<rect x="480" y="500" width="95" height="200" rx="4" fill="#52525b" opacity="0.15"/>
+</svg>

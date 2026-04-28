@@ -1,6 +1,7 @@
 ---
 kind: portfolio
 title: Portfolio
+subtitle: Companies we build and invest in
 intro: Our portfolio represents a diverse group of industry-leading companies.
 heroBackground: /images/portfolio-hero.png
 heroHeadline: In Good Company
@@ -19,7 +20,7 @@ companies:
   - name: Acharya University
     industry: Education
     description: Acharya University’s Uzbekistan campus represents the institution’s global expansion into international education, bringing its strong academic foundation and innovative learning approach to Central Asia.
-    logo: /logos/Acharya.png
+    logo: /logos/acharya-university-uzbekistan.png
     href: https://www.acharya.ac.uz/
   - name: Tentworks interactive
     industry: Gaming

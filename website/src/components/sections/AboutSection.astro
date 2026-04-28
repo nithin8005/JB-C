@@ -22,10 +22,10 @@ const aboutImageUrl = aboutImage ? withBase(aboutImage) : '';
 ---
 
 <section id="about" class="scroll-mt-20 border-b border-neutral-200/90 bg-white">
-	<div class="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
+	<div class="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-9 lg:px-12 lg:py-10">
 		{
 			headingText ? (
-				<h2 class="font-display text-2xl font-medium leading-tight tracking-tight text-neutral-900 sm:text-3xl">
+				<h2 class="max-w-full text-balance font-display text-2xl font-medium leading-tight tracking-tight text-neutral-900 sm:text-3xl">
 					{headingText}
 				</h2>
 			) : null
@@ -33,8 +33,8 @@ const aboutImageUrl = aboutImage ? withBase(aboutImage) : '';
 		<div
 			data-reveal
 			class:list={[
-				'grid gap-6 sm:gap-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center lg:gap-x-6 xl:gap-x-8 lg:gap-y-0',
-				headingText ? 'mt-6 lg:mt-8' : null,
+				'grid gap-5 sm:gap-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center lg:gap-x-6 xl:gap-x-8 lg:gap-y-0',
+				headingText ? 'mt-5 lg:mt-6' : null,
 			]}
 		>
 			<div

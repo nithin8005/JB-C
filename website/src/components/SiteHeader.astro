@@ -11,7 +11,6 @@ const { siteName } = Astro.props;
 
 const solutionsItems = [
 	{ label: 'Real Assets', href: '/real-assets' },
-	{ label: 'Portfolio', href: '/portfolio' },
 	{ label: 'Sustainability', href: '/sustainability' },
 	{ label: 'News', href: '/news' },
 	{ label: 'Careers', href: '/careers' },
@@ -40,10 +39,10 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 
 <header
 	id="site-header"
-	class="sticky top-0 z-50 border-b border-neutral-200/80 bg-[#f5f5f5]"
+	class="fixed inset-x-0 top-0 z-50 border-b border-neutral-200/80 bg-[#f5f5f5]"
 	data-solutions-route={solutionsSectionActive ? 'true' : 'false'}
 >
-	<div class="relative z-30 mx-auto flex h-16 max-w-6xl items-center bg-[#f5f5f5] px-5 sm:px-8 lg:h-[4.25rem] lg:px-12">
+	<div class="relative z-30 mx-auto flex h-16 max-w-6xl items-center bg-[#f5f5f5] px-5 sm:px-8 lg:h-17 lg:px-12">
 		<div class="flex min-w-0 flex-1 basis-0 justify-start">
 			<a href={withBase('/')} class="group flex min-w-0 items-center gap-2.5 text-neutral-900 no-underline">
 				
@@ -52,7 +51,7 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 		</div>
 
 		<nav class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-6 xl:gap-8 lg:flex" aria-label="Primary">
-			<a href={withBase('/')} class:list={navLinkClass('/')}>Home</a>
+			<a id="home-nav-link" href={withBase('/')} class:list={navLinkClass('/')}>Home</a>
 
 			<div class="relative">
 				<button
@@ -67,19 +66,11 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 					aria-controls="solutions-subnav"
 				>
 					Solutions
-					<svg
-						id="solutions-menu-chevron"
-						class="h-3.5 w-3.5 shrink-0 opacity-70 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] motion-reduce:duration-0"
-						viewBox="0 0 12 12"
-						fill="none"
-						aria-hidden="true"
-					>
-						<path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-					</svg>
 				</button>
 			</div>
 
 			<a href={withBase('/portfolio')} class:list={navLinkClass('/portfolio')}>Portfolio</a>
+			<a href={withBase('/affiliates')} class:list={navLinkClass('/affiliates')}>Affiliates</a>
 		</nav>
 
 		<div class="flex flex-1 basis-0 items-center justify-end gap-3">
@@ -116,6 +107,7 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 		id="solutions-subnav-shell"
 		class="solutions-subnav-shell relative z-10 hidden overflow-hidden lg:grid"
 		data-solutions-expanded={solutionsSectionActive ? 'true' : 'false'}
+		data-solutions-scroll-hidden="false"
 	>
 		<div class="min-h-0">
 			<nav
@@ -152,6 +144,24 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 			>
 				Home
 			</a>
+			<a
+				href={withBase('/portfolio')}
+				class:list={[
+					'border-b border-neutral-200/90 py-3.5 text-[15px] font-normal text-neutral-900 sm:py-4',
+					pathname === '/portfolio' && 'font-medium',
+				]}
+			>
+				Portfolio
+			</a>
+			<a
+				href={withBase('/affiliates')}
+				class:list={[
+					'border-b border-neutral-200/90 py-3.5 text-[15px] font-normal text-neutral-900 sm:py-4',
+					pathname === '/affiliates' && 'font-medium',
+				]}
+			>
+				Affiliates
+			</a>
 			<p class="px-0 pt-3 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">Solutions</p>
 			{
 				solutionsItems.map(({ label, href }) => (
@@ -182,16 +192,57 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 		const iconMenu = document.getElementById('nav-icon-menu');
 		const iconClose = document.getElementById('nav-icon-close');
 		const header = document.getElementById('site-header');
+		const homeNavLink = document.getElementById('home-nav-link');
 		const btn = document.getElementById('solutions-menu-btn');
 		const subnav = document.getElementById('solutions-subnav');
 		const subnavShell = document.getElementById('solutions-subnav-shell');
-		const chevron = document.getElementById('solutions-menu-chevron');
 
 		const routeActive = header && header.getAttribute('data-solutions-route') === 'true';
 		let solutionsForceOpen = false;
 		/** On Real Assets / Portfolio / … pages the strip is shown by default; user can dismiss it with the Solutions button. */
 		let solutionsRouteDismissed = false;
 		let lastLgDesktop = window.matchMedia('(min-width: 1024px)').matches;
+		let lastScrollY = window.scrollY;
+		let solutionsSubnavScrollHidden = false;
+
+		function setSolutionsSubnavScrollHidden(hidden) {
+			if (!subnavShell) return;
+			solutionsSubnavScrollHidden = hidden;
+			subnavShell.dataset.solutionsScrollHidden = hidden ? 'true' : 'false';
+		}
+
+		function isSolutionsExpandedDesktop() {
+			const desktop = window.matchMedia('(min-width: 1024px)').matches;
+			if (!desktop) return false;
+			return routeActive ? !solutionsRouteDismissed : solutionsForceOpen;
+		}
+
+		function syncSolutionsSubnavOnScroll() {
+			const currentY = Math.max(window.scrollY, 0);
+			const delta = currentY - lastScrollY;
+			const scrollingDown = delta > 2;
+			const scrollingUp = delta < -2;
+
+			if (!isSolutionsExpandedDesktop()) {
+				setSolutionsSubnavScrollHidden(false);
+				lastScrollY = currentY;
+				return;
+			}
+
+			if (currentY <= 8) {
+				setSolutionsSubnavScrollHidden(false);
+				lastScrollY = currentY;
+				return;
+			}
+
+			if (scrollingDown) {
+				setSolutionsSubnavScrollHidden(true);
+			} else if (scrollingUp) {
+				setSolutionsSubnavScrollHidden(false);
+			}
+
+			lastScrollY = currentY;
+		}
 
 		function setMobileOpen(open) {
 			if (!toggle || !panel || !iconMenu || !iconClose) return;
@@ -212,7 +263,15 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 			if (desktop && !expanded) subnav.setAttribute('inert', '');
 			else subnav.removeAttribute('inert');
 			btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-			if (chevron) chevron.classList.toggle('rotate-180', expanded);
+			if (homeNavLink && pathname === '/') {
+				homeNavLink.classList.toggle('border-neutral-900', !expanded);
+				homeNavLink.classList.toggle('text-neutral-900', !expanded);
+				homeNavLink.classList.toggle('border-transparent', expanded);
+				homeNavLink.classList.toggle('text-neutral-600', expanded);
+			}
+			if (!expanded) {
+				setSolutionsSubnavScrollHidden(false);
+			}
 		}
 
 		if (toggle && panel && iconMenu && iconClose) {
@@ -254,7 +313,11 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 				}
 			}
 			syncSolutionsSubnav();
+			lastScrollY = window.scrollY;
+			syncSolutionsSubnavOnScroll();
 		});
+
+		window.addEventListener('scroll', syncSolutionsSubnavOnScroll, { passive: true });
 
 		if (btn && subnav && subnavShell && header) {
 			btn.addEventListener('click', function (e) {
@@ -284,6 +347,7 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 		}
 
 		syncSolutionsSubnav();
+		syncSolutionsSubnavOnScroll();
 	})();
 </script>
 
