@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="t2">
+	<title id="t2">Abstract partner visual — warm accent</title>
+	<defs>
+		<linearGradient id="g2" x1="0%" y1="100%" x2="100%" y2="0%">
+			<stop offset="0%" stop-color="#fafaf9"/>
+			<stop offset="100%" stop-color="#f5f5f4"/>
+		</linearGradient>
+		<radialGradient id="sun2" cx="78%" cy="22%" r="45%">
+			<stop offset="0%" stop-color="#fde68a" stop-opacity="0.35"/>
+			<stop offset="70%" stop-color="#fde68a" stop-opacity="0"/>
+		</radialGradient>
+	</defs>
+	<rect width="1200" height="800" fill="url(#g2)"/>
+	<rect width="1200" height="800" fill="url(#sun2)"/>
+	<rect x="1" y="1" width="1198" height="798" fill="none" stroke="#e7e5e4" stroke-width="2"/>
+	<path fill="#d6d3d1" opacity="0.6" d="M0 540 L200 420 L360 500 L520 360 L700 440 L900 300 L1040 380 L1200 280 L1200 800 L0 800 Z"/>
+	<path fill="#a8a29e" opacity="0.3" d="M0 580 L260 480 L420 540 L600 400 L820 500 L1000 380 L1200 460 L1200 800 L0 800 Z"/>
+	<ellipse cx="420" cy="560" rx="160" ry="28" fill="#78716c" opacity="0.12"/>
+	<rect x="200" y="440" width="90" height="260" rx="4" fill="#b45309" opacity="0.12"/>
+	<rect x="320" y="400" width="70" height="300" rx="4" fill="#92400e" opacity="0.1"/>
+</svg>
