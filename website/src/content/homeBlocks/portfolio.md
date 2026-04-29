@@ -4,6 +4,8 @@ title: Portfolio
 subtitle: Companies we build and invest in
 intro: Our portfolio represents a diverse group of industry-leading companies.
 heroBackground: /images/portfolio-hero.png
+videoMp4: /videos/portfolio-hero-bg.mp4
+videoPoster: /images/portfolio-hero.png
 heroHeadline: In Good Company
 heroTagline: A portfolio of businesses at the forefront of innovation.
 # `logo:` must match a real file under website/public/logos/ (name and capitals count on Linux).

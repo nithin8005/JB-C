@@ -29,11 +29,15 @@ const d = entry.data;
 					</ul>
 				</section>
 				<section class="rounded border border-neutral-200/90 bg-stone-50/80 p-6 sm:p-8">
-					<div
-						class="aspect-video w-full rounded border border-neutral-200/90 bg-neutral-200"
-						role="img"
-						aria-label={d.testimonialPhotoAlt ?? 'Team photo'}
-					/>
+					<div class="aspect-video w-full overflow-hidden rounded border border-neutral-200/90 bg-neutral-200">
+						<img
+							src={withBase('/images/careers/team-discussion.png')}
+							alt={d.testimonialPhotoAlt ?? 'Team photo'}
+							class="h-full w-full object-cover object-center"
+							loading="lazy"
+							decoding="async"
+						/>
+					</div>
 					<blockquote class="mt-6 border-l-2 border-neutral-900 pl-4">
 						<p class="text-sm italic leading-relaxed text-neutral-700 sm:text-base">{d.testimonialQuote}</p>
 						<footer class="mt-3 text-xs font-semibold uppercase tracking-wider text-neutral-500">

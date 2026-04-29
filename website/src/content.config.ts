@@ -52,6 +52,10 @@ const homeBlocks = defineCollection({
 			intro: z.string(),
 			/** Short line under the Portfolio heading (e.g. “Companies we build and invest in”). */
 			subtitle: z.string().optional(),
+			/** Optional looping background video for portfolio hero (`public/` path, e.g. `/videos/portfolio.mp4`). */
+			videoMp4: z.string().optional(),
+			/** Optional poster image while the portfolio video loads (`public/` path). */
+			videoPoster: z.string().optional(),
 			/** Full-width hero image at top of portfolio page (`public/` path). */
 			heroBackground: z.string().optional(),
 			/** Hero headline when `heroBackground` is set (defaults to `title`). */
