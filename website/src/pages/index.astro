@@ -1,20 +1,16 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSection from '../components/sections/HeroSection.astro';
-import AboutSection from '../components/sections/AboutSection.astro';
 import LocationsSection from '../components/sections/LocationsSection.astro';
-import PortfolioSection from '../components/sections/PortfolioSection.astro';
+import WhoWeWorkWithSection from '../components/sections/WhoWeWorkWithSection.astro';
 import PartnersSection from '../components/sections/PartnersSection.astro';
-import AffiliatesSection from '../components/sections/AffiliatesSection.astro';
 import { requireHomeBlock } from '../lib/homeBlocks';
 
 const home = await getEntry('marketing', 'home');
 if (!home) {
-	throw new Error('Missing src/content/marketing/home.md');
+	throw new Error('Missing src/content/marketing/home.md'); 	
 }
-const { Content: HomeAbout } = await render(home);
-
 const heroEntry = await requireHomeBlock('hero');
 if (heroEntry.data.kind !== 'hero') {
 	throw new Error('Invalid hero block');
@@ -27,23 +23,11 @@ if (locationsEntry.data.kind !== 'locations') {
 }
 const locations = locationsEntry.data;
 
-const portfolioEntry = await requireHomeBlock('portfolio');
-if (portfolioEntry.data.kind !== 'portfolio') {
-	throw new Error('Invalid portfolio block');
-}
-const portfolio = portfolioEntry.data;
-
 const partnersEntry = await requireHomeBlock('partners');
 if (partnersEntry.data.kind !== 'partners') {
 	throw new Error('Invalid partners block');
 }
 const partners = partnersEntry.data;
-
-const affiliatesEntry = await requireHomeBlock('affiliates');
-if (affiliatesEntry.data.kind !== 'affiliates') {
-	throw new Error('Invalid affiliates block');
-}
-const affiliates = affiliatesEntry.data;
 ---
 
 <BaseLayout title={home.data.seo.title} description={home.data.seo.description}>
@@ -59,38 +43,18 @@ const affiliates = affiliatesEntry.data;
 			backgroundImage={hero.backgroundImage}
 			backgroundImageAlt={hero.backgroundImageAlt}
 		/>
-		<AboutSection
-			heading={home.data.aboutHeading}
-			points={home.data.aboutPoints}
-			aboutImage={home.data.aboutImage}
-			aboutImageAlt={home.data.aboutImageAlt}
-			profile={home.data.aboutProfile}
-		>
-			<HomeAbout />
-		</AboutSection>
 		<LocationsSection
 			title={locations.title}
 			intro={locations.intro}
 			locations={locations.locations}
 		/>
-		<PortfolioSection
-			title={portfolio.title}
-			intro={portfolio.intro}
-			subtitle={portfolio.subtitle}
-			companies={portfolio.companies}
-		/>
+		<WhoWeWorkWithSection />
 		<PartnersSection
 			title={partners.title}
 			intro={partners.intro}
 			gridImage={partners.gridImage}
 			gridImageAlt={partners.gridImageAlt}
 			groups={partners.groups ?? []}
-		/>
-		<AffiliatesSection
-			title={affiliates.title}
-			intro={affiliates.intro}
-			affiliates={affiliates.affiliates ?? []}
-			groups={affiliates.groups ?? []}
 		/>
 	</main>
 </BaseLayout>

@@ -20,7 +20,7 @@ groups:
         logo: /logos/partners/microsoft.png
         href: https://www.microsoft.com/
       - name: Coursera
-        logo: /logos/partners/coursera.png
+        logo: /logos/partners/coursera.png?v=2
         href: https://www.coursera.org/
       - name: LinkedIn
         logo: /logos/partners/linkedin.png

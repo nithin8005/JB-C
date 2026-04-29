@@ -12,7 +12,6 @@ const { siteName } = Astro.props;
 const solutionsItems = [
 	{ label: 'Real Assets', href: '/real-assets' },
 	{ label: 'Sustainability', href: '/sustainability' },
-	{ label: 'News', href: '/news' },
 	{ label: 'Careers', href: '/careers' },
 ];
 
@@ -70,7 +69,7 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 			</div>
 
 			<a href={withBase('/portfolio')} class:list={navLinkClass('/portfolio')}>Portfolio</a>
-			<a href={withBase('/affiliates')} class:list={navLinkClass('/affiliates')}>Affiliates</a>
+			<a href={withBase('/team')} class:list={navLinkClass('/team')}>Team</a>
 		</nav>
 
 		<div class="flex flex-1 basis-0 items-center justify-end gap-3">
@@ -154,13 +153,13 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 				Portfolio
 			</a>
 			<a
-				href={withBase('/affiliates')}
+				href={withBase('/team')}
 				class:list={[
 					'border-b border-neutral-200/90 py-3.5 text-[15px] font-normal text-neutral-900 sm:py-4',
-					pathname === '/affiliates' && 'font-medium',
+					pathname === '/team' && 'font-medium',
 				]}
 			>
-				Affiliates
+				Team
 			</a>
 			<p class="px-0 pt-3 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">Solutions</p>
 			{

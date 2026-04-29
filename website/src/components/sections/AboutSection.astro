@@ -2,8 +2,10 @@
 import { withBase } from '../../lib/withBase';
 
 interface Props {
+	/** Section `id` for anchors and scroll margin (default `about`). */
+	sectionId?: string;
 	heading?: string;
-	/** Optional bullet list under the About column (homepage). */
+
 	points?: string[];
 	/** Path from site root (file under `website/public/`). */
 	aboutImage?: string;
@@ -12,7 +14,7 @@ interface Props {
 	profile?: { name: string; title: string; roles: string[] };
 }
 
-const { heading, points: pointsProp, aboutImage, aboutImageAlt, profile } = Astro.props;
+const { sectionId = 'about', heading, points: pointsProp, aboutImage, aboutImageAlt, profile } = Astro.props;
 const points = (pointsProp ?? []).map((p) => p.trim()).filter(Boolean);
 const usePoints = points.length > 0;
 const headingText = heading?.trim();
@@ -21,7 +23,7 @@ const figureLabel = aboutImageAlt ?? 'About section image';
 const aboutImageUrl = aboutImage ? withBase(aboutImage) : '';
 ---
 
-<section id="about" class="scroll-mt-20 border-b border-neutral-200/90 bg-white">
+<section id={sectionId} class="scroll-mt-20 border-b border-neutral-200/90 bg-white">
 	<div class="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-9 lg:px-12 lg:py-10">
 		{
 			headingText ? (

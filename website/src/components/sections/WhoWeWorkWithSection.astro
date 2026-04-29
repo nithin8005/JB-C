@@ -1,0 +1,60 @@
+---
+const rows = [
+	{
+		label: '01',
+		title: 'Institutional Capital Partners',
+		description: 'We design long-horizon opportunities for institutions seeking resilient private market returns.',
+	},
+	{
+		label: '02',
+		title: 'Advisors and Wealth Platforms',
+		description: 'We support advisors with diversified access, structured strategies, and actionable market perspective.',
+	},
+	{
+		label: '03',
+		title: 'Founders and Operating Leaders',
+		description: 'We collaborate with leadership teams to scale durable businesses through focused execution.',
+	},
+];
+---
+
+<section id="who-we-work-with" class="scroll-mt-20 border-b border-neutral-200/90 bg-white">
+	<div class="mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-12 lg:py-8">
+		<div data-reveal class="font-hero">
+			<p
+				class="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-500"
+				data-reveal-child
+				style="--reveal-delay: 0ms"
+			>
+				Who We Work With
+			</p>
+			<h2
+				class="mt-2.5 max-w-4xl text-2xl font-semibold leading-tight tracking-tight text-neutral-800 sm:text-3xl lg:text-4xl"
+				data-reveal-child
+				style="--reveal-delay: 80ms"
+			>
+				Trusted by institutional investors, advisory teams, and ambitious business builders
+			</h2>
+
+			<div class="mt-5 border-t border-neutral-200/90 lg:mt-6">
+				{
+					rows.map((row, i) => (
+						<div
+							class="grid grid-cols-1 gap-y-2 border-b border-neutral-200/90 py-2.5 sm:py-3 lg:grid-cols-[5.5rem_minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start lg:gap-x-5"
+							data-reveal-child
+							style={`--reveal-delay: ${130 + i * 70}ms`}
+						>
+							<div class="flex lg:justify-start">
+								<span class="inline-flex h-9 w-9 items-center justify-center bg-neutral-800 text-base font-semibold text-white">
+									{row.label}
+								</span>
+							</div>
+							<h3 class="text-xl font-semibold tracking-tight text-neutral-800">{row.title}</h3>
+							<p class="text-sm leading-relaxed text-neutral-500">{row.description}</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</section>

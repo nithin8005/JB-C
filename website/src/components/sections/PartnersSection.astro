@@ -40,18 +40,18 @@ const useBanner = Boolean(bannerSrc);
 /** Equal columns and uniform row/column gaps at every breakpoint. */
 function gridClassForCount(count: number): string {
 	if (count >= 8) {
-		/* Extra column gap on phones so marks don’t sit on the viewport edge */
-		return 'grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-4 sm:grid-cols-4 lg:grid-cols-8';
+		/* Mobile-first: balanced card spacing; expand to 4/8 cols on larger screens */
+		return 'grid grid-cols-4 gap-2 sm:gap-4 sm:grid-cols-4 lg:grid-cols-8';
 	}
 	if (count === 3) {
-		return 'grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-4 sm:grid-cols-3 lg:mx-auto lg:max-w-4xl';
+		return 'grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:mx-auto lg:max-w-4xl';
 	}
-	return 'grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3';
+	return 'grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3';
 }
 ---
 
 <section id="partners" class="scroll-mt-20 border-b border-neutral-200/90 bg-stone-50">
-	<div class="mx-auto max-w-6xl px-6 py-6 sm:px-8 sm:py-7 lg:px-12 lg:py-8">
+	<div class="mx-auto max-w-6xl px-5 py-6 sm:px-8 sm:py-7 lg:px-12 lg:py-8">
 		<h2 class="text-left font-display text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
 			{title}
 		</h2> 
@@ -86,21 +86,41 @@ function gridClassForCount(count: number): string {
 							<ul class:list={[gridClassForCount(group.items.length), 'min-w-0 list-none items-stretch']}>
 								{group.items.map((item) => {
 									const src = assetSrc(item.logo);
+								const isTechEducation = (group.title ?? '').trim().toLowerCase() === 'technology & education';
+								const itemName = (item.name ?? '').trim().toLowerCase();
+								const isIbmOrCoursera = ['ibm', 'coursera'].includes(itemName);
+								const isLarsen = itemName === 'larsen & toubro';
 								/*
 								 * Below `sm`: identical cell height and logo bounds for every partner (alignment + parity).
 								 * From `sm`: preserve compact/wide/tall tuning from content flags.
 								 */
 								const cellTall = item.largeLogo;
 								const cellFrame = [
-									'flex h-18 w-full min-w-0 shrink-0 items-center justify-center overflow-hidden px-2 py-1 sm:p-2',
+									isTechEducation
+										? 'flex h-14 w-full min-w-0 shrink-0 items-center justify-center overflow-hidden px-2 py-1 sm:h-16 sm:p-2'
+										: 'flex h-16 w-full min-w-0 shrink-0 items-center justify-center overflow-hidden px-2 py-1.5 sm:h-18 sm:p-2',
 									cellTall ? 'sm:h-20 lg:h-21' : 'sm:h-18 lg:h-19',
 								].join(' ');
 								/** Taller cap on phones helps wide wordmarks (IBM, EC-Council) read closer to square marks. */
-								const imgClass = item.compactLogo
-									? 'mx-auto block h-11 w-full max-h-11 max-w-full object-contain object-center sm:h-9 sm:w-auto sm:max-h-9 sm:max-w-[88%] lg:h-10 lg:max-h-10'
+								let imgClass = item.compactLogo
+									? isTechEducation
+										? 'mx-auto block h-7 w-full max-h-7 max-w-[76%] object-contain object-center sm:h-8 sm:w-auto sm:max-h-8 sm:max-w-[80%] lg:h-8 lg:max-h-8 lg:max-w-[82%]'
+										: 'mx-auto block h-11 w-full max-h-11 max-w-full object-contain object-center sm:h-9 sm:w-auto sm:max-h-9 sm:max-w-[88%] lg:h-10 lg:max-h-10'
 									: item.largeLogo
-										? 'mx-auto block h-[3.25rem] w-full max-h-[3.25rem] max-w-full object-contain object-center sm:h-14 sm:w-auto sm:max-h-14 sm:max-w-full lg:h-16 lg:max-h-16'
-										: 'mx-auto block h-[3.25rem] w-full max-h-[3.25rem] max-w-full object-contain object-center sm:h-12 sm:w-auto sm:max-h-12 sm:max-w-full lg:h-14 lg:max-h-14';
+										? isTechEducation
+											? 'mx-auto block h-8 w-full max-h-8 max-w-[76%] object-contain object-center sm:h-9 sm:w-auto sm:max-h-9 sm:max-w-[80%] lg:h-10 lg:max-h-10 lg:max-w-[82%]'
+											: 'mx-auto block h-[3.25rem] w-full max-h-[3.25rem] max-w-full object-contain object-center sm:h-14 sm:w-auto sm:max-h-14 sm:max-w-full lg:h-16 lg:max-h-16'
+										: isTechEducation
+											? 'mx-auto block h-8 w-full max-h-8 max-w-[76%] object-contain object-center sm:h-9 sm:w-auto sm:max-h-9 sm:max-w-[80%] lg:h-10 lg:max-h-10 lg:max-w-[82%]'
+											: 'mx-auto block h-[3.25rem] w-full max-h-[3.25rem] max-w-full object-contain object-center sm:h-12 sm:w-auto sm:max-h-12 sm:max-w-full lg:h-14 lg:max-h-14';
+								if (isTechEducation && isIbmOrCoursera) {
+									imgClass =
+										'mx-auto block h-10 w-auto max-h-10 max-w-[92%] object-contain object-center sm:h-9 sm:w-auto sm:max-h-9 sm:max-w-[80%] lg:h-10 lg:max-h-10 lg:max-w-[82%]';
+								}
+								if (isTechEducation && isLarsen) {
+									imgClass =
+										'mx-auto block h-10 w-auto max-h-10 max-w-[90%] object-contain object-center sm:h-9 sm:w-auto sm:max-h-11 sm:max-w-[80%] lg:h-10 lg:max-h-10 lg:max-w-[82%]';
+								}
 								const inner = (
 									<span class="partner-logo-slot flex h-full w-full min-h-0 min-w-0 items-center justify-center overflow-hidden">
 										<img
@@ -113,12 +133,12 @@ function gridClassForCount(count: number): string {
 									</span>
 								);
 									return (
-										<li class="flex min-h-0 w-full min-w-0">
+										<li class="flex min-h-0 w-full min-w-0 rounded-md">
 											{item.href ? (
 												<a
 													href={item.href}
 													class:list={[
-														'partner-logo-link flex w-full min-w-0 max-w-full items-center justify-center overflow-hidden transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400',
+														'partner-logo-link flex w-full min-w-0 max-w-full items-center justify-center overflow-hidden rounded-md transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400',
 														cellFrame,
 													]}
 													target="_blank"

@@ -15,6 +15,8 @@ interface Props {
 	/** Short line under the Portfolio heading (e.g. companies you build and invest in). */
 	subtitle?: string;
 	companies: Company[];
+	videoMp4?: string;
+	videoPoster?: string;
 	heroBackground?: string;
 	heroHeadline?: string;
 	heroTagline?: string;
@@ -25,6 +27,8 @@ const {
 	intro,
 	subtitle,
 	companies,
+	videoMp4,
+	videoPoster,
 	heroBackground,
 	heroHeadline,
 	heroTagline,
@@ -32,7 +36,10 @@ const {
 
 const portfolioTagline = subtitle?.trim() || 'Companies we build and invest in';
 
-const hasHero = Boolean(heroBackground);
+const hasHeroVideo = Boolean(videoMp4?.trim());
+const hasHero = Boolean(hasHeroVideo || heroBackground);
+const heroVideoUrl = videoMp4?.trim() ? withBase(videoMp4.trim()) : '';
+const heroPosterUrl = videoPoster?.trim() ? withBase(videoPoster.trim()) : undefined;
 const heroBackgroundUrl = heroBackground ? withBase(heroBackground) : '';
 const headline = heroHeadline ?? title;
 const tagline = heroTagline ?? intro;
@@ -45,17 +52,38 @@ const cardClass =
 	{
 		hasHero ? (
 			<div class="relative min-h-[min(22rem,52vh)] overflow-hidden sm:min-h-[min(26rem,56vh)]">
-				<img
-					src={heroBackgroundUrl}
-					alt=""
-					class="absolute inset-0 h-full w-full object-cover object-[55%_center] sm:object-center"
-					loading="eager"
-					decoding="async"
-					fetchpriority="high"
-					aria-hidden="true"
-				/>
+				{
+					hasHeroVideo ? (
+						<>
+							<div class="absolute inset-0 bg-slate-900" aria-hidden="true" />
+							<video
+								class="absolute inset-0 h-full w-full object-cover object-center"
+								autoplay
+								muted
+								loop
+								playsinline
+								disablepictureinpicture
+								preload="metadata"
+								poster={heroPosterUrl}
+								aria-hidden="true"
+							>
+								<source src={heroVideoUrl} type="video/mp4" />
+							</video>
+						</>
+					) : (
+						<img
+							src={heroBackgroundUrl}
+							alt=""
+							class="absolute inset-0 h-full w-full object-cover object-[55%_center] sm:object-center"
+							loading="eager"
+							decoding="async"
+							fetchpriority="high"
+							aria-hidden="true"
+						/>
+					)
+				}
 				<div
-					class="pointer-events-none absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/35 sm:from-slate-950 sm:via-slate-950/75 sm:to-transparent"
+					class="pointer-events-none absolute inset-0 bg-linear-to-r from-slate-950/95 via-slate-950/80 to-slate-950/35 sm:from-slate-950 sm:via-slate-950/75 sm:to-transparent"
 					aria-hidden="true"
 				/>
 				<div class="relative z-10 mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-16 lg:px-12 lg:py-20">
