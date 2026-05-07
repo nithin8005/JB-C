@@ -7,5 +7,4 @@ description: >-
 ctaLabel: Explore
 ctaHref: '/team'
 videoMp4: /videos/hero-private-equity.mp4
-videoPoster: /images/home-hero-bg.png
 ---
