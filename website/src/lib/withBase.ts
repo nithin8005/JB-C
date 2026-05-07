@@ -4,6 +4,10 @@
  */
 function normalizedBase(): string {
 	let b = import.meta.env.BASE_URL ?? '/';
+	if ((!b || b === '/') && !import.meta.env.DEV) {
+		// GitHub Pages project site deploy path fallback.
+		b = '/JB-C/';
+	}
 	if (!b || b === '/') return '/';
 	return b.endsWith('/') ? b : `${b}/`;
 }
