@@ -8,50 +8,50 @@ groups:
   - title: Parent Group
     items:
       - name: Acharya Group of Institutions
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya Group of Institutions
         description: Founded by B. Premnath Reddy, Chairman
         href: https://www.acharya.ac.in/
   - title: Member Institutions
     items:
       - name: Acharya Institute of Technology (AIT)
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: https://www.acharya.ac.in/acharya-institute-of-technology.html
       - name: Acharya Institute of Graduate Studies (AIGS)
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: https://www.acharya.ac.in/acharya-institute-of-graduate-studies.html
       - name: Acharya & BM Reddy College of Pharmacy
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: "https://www.acharya.ac.in/acharya-&-bmreddy-college-of-pharmacy.html"
       - name: Acharya School of Design
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: https://www.acharya.ac.in/acharya-school-of-design.html
       - name: "Acharya's NRV School of Architecture"
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: "https://www.acharya.ac.in/acharya's-nrv-school-of-architecture.html"
       - name: Acharya Institute of Allied Health Sciences
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: https://www.acharya.ac.in/acharya-institute-of-allied-health-sciences.html
       - name: "Acharya's NR Institute of Physiotherapy"
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: https://www.acharya.ac.in/acharya-nr-institute-of-physiotherapy.html
       - name: Smt. Nagarathnamma School of Nursing
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: https://www.acharya.ac.in/smt-nagarathnamma-school-of-nursing.html
       - name: Smt. Nagarathnamma College of Nursing
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: https://www.acharya.ac.in/smt-nagarathnamma-college-of-nursing.html
       - name: Acharya Polytechnic
-        logo: /logos/acharya.png?v=20260507
+        logo: /logos/acharya-group.png?v=20260507b
         logoAlt: Acharya
         href: https://www.acharya.ac.in/acharya-polytechnic.html
     
