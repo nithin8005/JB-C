@@ -38,8 +38,8 @@ const { title, intro, locations } = Astro.props;
 				locations.map((loc, i) => (
 					<div
 						class="group flex flex-col"
-						data-reveal-child
-						style={`--reveal-delay: ${110 + i * 75}ms`}
+						data-reveal
+						style={`transition-delay: ${180 + i * 190}ms`}
 					>
 						<div
 							class="relative aspect-3/2 w-full overflow-hidden rounded border border-neutral-200/90 bg-neutral-100 shadow-sm transition-[border-color,box-shadow] duration-300 group-hover:border-neutral-300 group-hover:shadow-md"
