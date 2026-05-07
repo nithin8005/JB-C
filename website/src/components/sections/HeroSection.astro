@@ -43,11 +43,11 @@ const ctaHrefResolved = withBase(ctaHref);
 		hasVideo ? (
 			<>
 				<div
-					class="hero-video-fallback absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950"
+					class="hero-video-fallback absolute inset-0 bg-linear-to-br from-slate-950 via-slate-900 to-blue-950"
 					aria-hidden="true"
 				/>
 				<video
-					class="hero-video-bg absolute inset-0 h-full w-full object-cover"
+					class="hero-video-bg hero-media-in hero-scroll-media absolute inset-0 h-full w-full object-cover"
 					autoplay
 					muted
 					loop
@@ -61,7 +61,7 @@ const ctaHrefResolved = withBase(ctaHref);
 					{videoMp4Url ? <source src={videoMp4Url} type="video/mp4" /> : null}
 				</video>
 				<div
-					class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/25 sm:from-black/75 sm:via-black/40 sm:to-transparent"
+					class="pointer-events-none absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-black/25 sm:from-black/75 sm:via-black/40 sm:to-transparent"
 					aria-hidden="true"
 				/>
 			</>
@@ -71,7 +71,7 @@ const ctaHrefResolved = withBase(ctaHref);
 				<img
 					src={bgImageUrl}
 					alt={backgroundImageAlt ?? ''}
-					class="absolute inset-0 z-[1] h-full w-full object-cover object-[20%_50%] sm:object-center"
+					class="hero-media-in hero-scroll-media absolute inset-0 z-1 h-full w-full object-cover object-[20%_50%] sm:object-center"
 					loading="eager"
 					decoding="async"
 					fetchpriority="high"
@@ -86,9 +86,10 @@ const ctaHrefResolved = withBase(ctaHref);
 			(hasVideo || hasBgImage) && 'lg:py-24',
 		]}
 	>
-		<div class="hero-editorial-in max-w-3xl font-hero">
+		<div class="hero-editorial-in hero-scroll-content max-w-3xl font-hero">
 			<h1
 				class:list={[
+					'hero-title-in',
 					'text-[clamp(2.1rem,4.2vw,3.35rem)] font-semibold leading-[1.06] tracking-[-0.02em]',
 					hasVideo ? 'text-white' : 'text-neutral-900',
 				]}
@@ -97,6 +98,7 @@ const ctaHrefResolved = withBase(ctaHref);
 			</h1>
 			<p
 				class:list={[
+					'hero-copy-in',
 					'mt-5 max-w-xl text-base font-normal leading-relaxed sm:text-lg',
 					hasVideo ? 'text-white/85' : 'text-neutral-600',
 				]}
@@ -106,6 +108,7 @@ const ctaHrefResolved = withBase(ctaHref);
 			<a
 				href={ctaHrefResolved}
 				class:list={[
+					'hero-cta-in',
 					'group mt-8 inline-flex items-center gap-1 border-b pb-0.5 text-sm font-semibold tracking-wide transition',
 					hasVideo
 						? 'border-white text-white hover:border-white/60 hover:text-white/85'
@@ -120,6 +123,66 @@ const ctaHrefResolved = withBase(ctaHref);
 		</div>
 	</div>
 </section>
+
+<script is:inline>
+	(() => {
+		function runHeroIntro() {
+			const hero = document.getElementById('hero');
+			if (!hero) return;
+			hero.classList.remove('hero-animate-ready');
+			void hero.offsetWidth;
+			requestAnimationFrame(() => {
+				hero.classList.add('hero-animate-ready');
+			});
+		}
+
+		function bindHeroScrollMotion() {
+			const hero = document.getElementById('hero');
+			if (!hero) return;
+			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+			const media = hero.querySelector<HTMLElement>('.hero-scroll-media');
+			const content = hero.querySelector<HTMLElement>('.hero-scroll-content');
+			if (!media || !content) return;
+
+			let ticking = false;
+
+			const update = () => {
+				const rect = hero.getBoundingClientRect();
+				const viewport = window.innerHeight || 1;
+				const progress = Math.min(Math.max((0 - rect.top) / (viewport * 1.1), 0), 1);
+				media.style.transform = `translate3d(0, ${Math.round(progress * -44)}px, 0)`;
+				content.style.transform = `translate3d(0, ${Math.round(progress * -18)}px, 0)`;
+				content.style.opacity = String(1 - progress * 0.28);
+				ticking = false;
+			};
+
+			const onScroll = () => {
+				if (ticking) return;
+				ticking = true;
+				requestAnimationFrame(update);
+			};
+
+			update();
+			window.addEventListener('scroll', onScroll, { passive: true });
+			window.addEventListener('resize', onScroll);
+			document.addEventListener('astro:before-swap', () => {
+				window.removeEventListener('scroll', onScroll);
+				window.removeEventListener('resize', onScroll);
+			}, { once: true });
+		}
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', runHeroIntro, { once: true });
+		} else {
+			runHeroIntro();
+		}
+		bindHeroScrollMotion();
+
+		document.addEventListener('astro:page-load', runHeroIntro);
+		document.addEventListener('astro:page-load', bindHeroScrollMotion);
+	})();
+</script>
 
 <style is:global>
 	@media (prefers-reduced-motion: reduce) {
