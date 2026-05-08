@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@source "../**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
 
 /*
  * Lock the document to the viewport width: tiny horizontal overflow (common with
@@ -93,23 +94,67 @@ video {
 	}
 }
 
-/* Hero: subtle motion on load (no opacity hide) */
+/* Hero: noticeable intro motion on first paint */
 @media (prefers-reduced-motion: no-preference) {
-	@keyframes hero-editorial-shift {
+	@keyframes hero-media-in {
 		from {
-			transform: translate3d(0, 0.75rem, 0);
+			opacity: 0.78;
+			transform: scale(1.055);
 		}
 		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	@keyframes hero-editorial-shift {
+		from {
+			opacity: 0;
+			transform: translate3d(0, 1.25rem, 0);
+		}
+		to {
+			opacity: 1;
 			transform: translate3d(0, 0, 0);
 		}
 	}
-	.hero-editorial-in {
-		animation: hero-editorial-shift 0.95s cubic-bezier(0.19, 1, 0.22, 1) both;
+	.hero-media-in {
+		transform-origin: center;
+		opacity: 1;
+	}
+
+	.hero-title-in,
+	.hero-copy-in,
+	.hero-cta-in {
+		opacity: 1;
+	}
+
+	.hero-animate-ready .hero-media-in {
+		animation: hero-media-in 1.35s cubic-bezier(0.19, 1, 0.22, 1) both;
+	}
+	.hero-animate-ready .hero-title-in,
+	.hero-animate-ready .hero-copy-in,
+	.hero-animate-ready .hero-cta-in {
+		opacity: 0;
+		animation: hero-editorial-shift 1.05s cubic-bezier(0.19, 1, 0.22, 1) both;
+	}
+	.hero-animate-ready .hero-title-in {
+		animation-delay: 70ms;
+	}
+	.hero-animate-ready .hero-copy-in {
+		animation-delay: 260ms;
+	}
+	.hero-animate-ready .hero-cta-in {
+		animation-delay: 460ms;
 	}
 }
 @media (prefers-reduced-motion: reduce) {
-	.hero-editorial-in {
-		animation: none;
+	.hero-media-in,
+	.hero-title-in,
+	.hero-copy-in,
+	.hero-cta-in {
+		opacity: 1 !important;
+		animation: none !important;
+		transform: none !important;
 	}
 }
 

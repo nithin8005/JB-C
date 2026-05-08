@@ -33,7 +33,7 @@ groups:
     items:
       - name: People Tree Hospitals
         logo: /logos/partners/people-tree.png
-        href: https://peopletreehospitals.com/
+        href: https://peopletreehospitals.com/  
       - name: Manipal Hospitals
         logo: /logos/partners/manipal.png
         href: https://www.manipalhospitals.com/

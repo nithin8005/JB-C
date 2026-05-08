@@ -29,4 +29,9 @@ companies:
     description: Tentworks Interactive is a global game development company focused on tycoon and strategy games, leveraging AI and advanced simulation technology to create immersive digital experiences..
     logo: /logos/tentworks1.png
     href: https://tentworks.io/
+  - name: MAM Minerals
+    industry: Mining
+    description: Largest beneficiated iron ore mine, Malaysia.
+    logo: /logos/mam-minerals.png
+    href: https://mamminerals.com/
 ---

@@ -1,0 +1,63 @@
+---
+import { withBase } from '../../lib/withBase';
+
+interface NewsItem {
+	title: string;
+	description: string;
+	category: string;
+	publishedAt: Date;
+}
+
+interface Props {
+	title: string;
+	intro: string;
+	viewAllLabel: string;
+	viewAllHref: string;
+	items: NewsItem[];
+}
+
+const { title, intro, viewAllLabel, viewAllHref, items } = Astro.props;
+
+function formatDate(d: Date) {
+	return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+---
+
+<section id="news" class="border-b border-neutral-200/90 bg-white">
+	<div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
+		<div data-reveal>
+			<h2 class="font-display text-2xl font-medium text-neutral-900 sm:text-3xl" data-reveal-child style="--reveal-delay: 0ms">
+				{title}
+			</h2>
+			<p class="mt-2.5 max-w-2xl text-sm leading-relaxed text-neutral-600 sm:text-base" data-reveal-child style="--reveal-delay: 60ms">
+				{intro}
+			</p>
+		</div>
+
+		<ul class="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+			{
+				items.map((item, i) => (
+					<li>
+						<article class="group flex h-full flex-col rounded-lg border border-neutral-200/90 bg-stone-50/70 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-md" data-reveal-child style={`--reveal-delay: ${100 + i * 60}ms`}>
+							<div class="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-wider text-neutral-500">
+								<span>{formatDate(item.publishedAt)}</span>
+								<span class="rounded border border-neutral-200/90 bg-white px-2 py-0.5 text-neutral-700">{item.category}</span>
+							</div>
+							<h3 class="mt-3 font-display text-lg font-medium text-neutral-900">{item.title}</h3>
+							<p class="mt-2 line-clamp-3 text-sm leading-relaxed text-neutral-600">{item.description}</p>
+						</article>
+					</li>
+				))
+			}
+		</ul>
+
+		<div class="mt-8">
+			<a
+				href={withBase(viewAllHref)}
+				class="inline-flex items-center justify-center border border-neutral-900 bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800"
+			>
+				{viewAllLabel}
+			</a>
+		</div>
+	</div>
+</section>

@@ -1,10 +1,11 @@
 ---
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSection from '../components/sections/HeroSection.astro';
 import LocationsSection from '../components/sections/LocationsSection.astro';
 import WhoWeWorkWithSection from '../components/sections/WhoWeWorkWithSection.astro';
 import PartnersSection from '../components/sections/PartnersSection.astro';
+import NewsPreviewSection from '../components/sections/NewsPreviewSection.astro';
 import { requireHomeBlock } from '../lib/homeBlocks';
 
 const home = await getEntry('marketing', 'home');
@@ -28,6 +29,23 @@ if (partnersEntry.data.kind !== 'partners') {
 	throw new Error('Invalid partners block');
 }
 const partners = partnersEntry.data;
+
+const newsMetaEntry = await getEntry('site', 'news-page');
+if (!newsMetaEntry || newsMetaEntry.data.doc !== 'news-page') {
+	throw new Error('Missing src/content/site/news-page.md with doc: news-page');
+}
+const newsMeta = newsMetaEntry.data;
+
+const newsItems = (await getCollection('news'))
+	.filter((item) => !item.data.draft)
+	.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+	.slice(0, 3)
+	.map((item) => ({
+		title: item.data.title,
+		description: item.data.description,
+		category: item.data.category,
+		publishedAt: item.data.publishedAt,
+	}));
 ---
 
 <BaseLayout title={home.data.seo.title} description={home.data.seo.description}>
@@ -55,6 +73,13 @@ const partners = partnersEntry.data;
 			gridImage={partners.gridImage}
 			gridImageAlt={partners.gridImageAlt}
 			groups={partners.groups ?? []}
+		/>
+		<NewsPreviewSection
+			title={newsMeta.pageHeading}
+			intro={newsMeta.pageIntro}
+			viewAllLabel={newsMeta.viewAllLabel}
+			viewAllHref="/news"
+			items={newsItems}
 		/>
 	</main>
 </BaseLayout>

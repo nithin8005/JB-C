@@ -16,23 +16,6 @@ const articles = (await getCollection('news'))
 function formatDate(d: Date) {
 	return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
-
-function visualClassForCategory(category: string) {
-	switch (category) {
-		case 'Investment':
-			return 'from-emerald-700 via-emerald-600 to-teal-500';
-		case 'Portfolio':
-			return 'from-indigo-700 via-indigo-600 to-blue-500';
-		case 'ESG':
-			return 'from-green-700 via-lime-600 to-emerald-500';
-		case 'Award':
-			return 'from-amber-700 via-orange-600 to-yellow-500';
-		case 'Partnership':
-			return 'from-cyan-700 via-sky-600 to-blue-500';
-		default:
-			return 'from-slate-700 via-slate-600 to-slate-500';
-	}
-}
 ---
 
 <BaseLayout title={meta.seo.title} description={meta.seo.description}>
@@ -44,20 +27,7 @@ function visualClassForCategory(category: string) {
 				{
 					articles.map((item) => (
 						<li>
-							<article class="group grid gap-4 rounded border border-neutral-200/90 bg-stone-50/80 p-5 transition hover:border-neutral-300 hover:shadow-sm sm:grid-cols-[13rem_minmax(0,1fr)] sm:gap-6 sm:p-6">
-								<div
-									class:list={[
-										'relative hidden overflow-hidden rounded-md sm:block',
-										'bg-linear-to-br',
-										visualClassForCategory(item.data.category),
-									]}
-									aria-hidden="true"
-								>
-									<div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22)_0%,transparent_42%),radial-gradient(circle_at_85%_80%,rgba(255,255,255,0.18)_0%,transparent_45%)]" />
-									<div class="absolute bottom-3 left-3 rounded bg-black/25 px-2 py-1 text-[11px] font-semibold uppercase tracking-wider text-white/95 backdrop-blur-sm">
-										{item.data.category}
-									</div>
-								</div>
+							<article class="group rounded border border-neutral-200/90 bg-stone-50/80 p-5 transition hover:border-neutral-300 hover:shadow-sm sm:p-6">
 								<div>
 								<div class="flex flex-wrap items-center gap-3 text-xs font-medium uppercase tracking-wider text-neutral-500">
 									<span>{formatDate(item.data.publishedAt)}</span>
@@ -67,12 +37,6 @@ function visualClassForCategory(category: string) {
 								</div>
 								<h2 class="mt-3 font-display text-xl font-medium text-neutral-900 sm:text-2xl">{item.data.title}</h2>
 								<p class="mt-2 max-w-3xl text-sm leading-relaxed text-neutral-600 sm:text-base">{item.data.description}</p>
-								<a
-									href={withBase(item.data.readMoreHref ?? '#')}
-									class="mt-4 inline-flex text-sm font-medium text-neutral-900 underline-offset-4 group-hover:underline"
-								>
-									{meta.readMoreLabel}
-								</a>
 								</div>
 							</article>
 						</li>
