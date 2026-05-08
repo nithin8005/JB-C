@@ -29,6 +29,8 @@ jobs:
           cache-dependency-path: website/package-lock.json
       - name: Install and build
         working-directory: website
+        env:
+          DEPLOY_TARGET: github-pages
         run: |
           npm ci
           npm run build

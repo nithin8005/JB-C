@@ -2,9 +2,11 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
-// GitHub Pages project site uses `/JB-C`. For local dev, `npm run dev` sets `ASTRO_DEV_BASE=1`
-// so `http://localhost:4321/careers` works without the `/JB-C` prefix (see package.json).
-const base = process.env.ASTRO_DEV_BASE === '1' ? '/' : '/JB-C';
+// Default to `/` for local dev and Cloudflare.
+// GitHub Pages uses project-site base `/JB-C` via DEPLOY_TARGET=github-pages in workflow.
+// @ts-ignore
+const isGitHubPages = process.env.DEPLOY_TARGET === 'github-pages';
+const base = isGitHubPages ? '/JB-C' : '/';
 
 // https://astro.build/config
 export default defineConfig({
