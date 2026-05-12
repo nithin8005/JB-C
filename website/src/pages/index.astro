@@ -57,4 +57,23 @@ const partners = partnersEntry.data;
 			groups={partners.groups ?? []}
 		/>
 	</main>
+	<script is:inline>
+		(() => {
+			const scrollToHero = () => {
+				const hero = document.getElementById('hero');
+				if (hero) {
+					hero.scrollIntoView({ block: 'start' });
+					return;
+				}
+				window.scrollTo({ top: 0, left: 0 });
+			};
+
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', scrollToHero, { once: true });
+			} else {
+				scrollToHero();
+			}
+			document.addEventListener('astro:page-load', scrollToHero);
+		})();
+	</script>
 </BaseLayout>
