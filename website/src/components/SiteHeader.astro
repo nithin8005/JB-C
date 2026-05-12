@@ -69,6 +69,7 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 			</div>
 
 			<a href={withBase('/portfolio')} class:list={navLinkClass('/portfolio')}>Portfolio</a>
+			<a href={withBase('/news')} class:list={navLinkClass('/news')}>News</a>
 			<a href={withBase('/team')} class:list={navLinkClass('/team')}>Team</a>
 		</nav>
 
@@ -151,6 +152,15 @@ const solutionsSectionActive = solutionsPaths.has(pathname);
 				]}
 			>
 				Portfolio
+			</a>
+			<a
+				href={withBase('/news')}
+				class:list={[
+					'border-b border-neutral-200/90 py-3.5 text-[15px] font-normal text-neutral-900 sm:py-4',
+					pathname === '/news' && 'font-medium',
+				]}
+			>
+				News
 			</a>
 			<a
 				href={withBase('/team')}
